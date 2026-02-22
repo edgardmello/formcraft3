@@ -219,7 +219,7 @@
     $fc_translate['Your License Key'] = esc_html__('Your License Key', 'formcraft');
     $fc_translate['Your Email'] = esc_html__('Your Email', 'formcraft');
   }
-  add_action('init', 'formcraft3_translate_init');  
+  add_action('init', 'formcraft3_translate_init');
 
   /*
   Create the necessary tables on plugin activation
@@ -329,7 +329,7 @@
         }
         if ( ! defined( 'FS_CHMOD_FILE' ) ) {
             define( 'FS_CHMOD_FILE', ( fileperms( ABSPATH . 'index.php' ) & 0777 | 0644 ) );
-        }       
+        }
       $FSD = new WP_Filesystem_Direct(false);
       $FSD->rmdir($upload['basedir'].'/formcraft3', true);
 
@@ -474,18 +474,18 @@
       $this->initPluginData();
       $this->getRepoReleaseInfo();
 
-      
+
       if ( get_site_option( 'f3_expires' )==NULL ) {
         return $transient;
       }
 
       $expires_time = get_site_option( 'f3_expires' );
-      
+
       if ( ($expires_time-strtotime('now'))/(60 * 60 * 24)<0 ) {
         return $transient;
       }
 
-      
+
       if ( empty( $transient->checked ) || empty( $this->githubAPIResult->tag_name ) ) {
         return $transient;
       }
@@ -609,7 +609,7 @@
     foreach ($all_data as $key => $value) {
       $value['id'] = intval($value['id']);
       $query = $wpdb->prepare("SELECT COUNT(*) FROM $fc_forms_table WHERE imported=%d", $value['id']);
-      if ($wpdb->get_var( $query )!=0){ 
+      if ($wpdb->get_var( $query )!=0){
         continue;
       }
       $form_name = $value['name'];
@@ -640,7 +640,7 @@
     global $fc_addons, $fc_meta;
     if (!current_user_can($fc_meta['user_can'])) {
       die();
-    }    
+    }
     if ($fc_meta['preview_mode']==true) {
       echo json_encode(array('failed'=>esc_html__('Cannot install plugins in demo mode', 'formcraft')));
       die();
@@ -717,7 +717,7 @@
     $nonce = $_REQUEST['formcraft3_wpnonce'];
     if (!wp_verify_nonce( $nonce, 'formcraft3_wpnonce')) {
       exit;
-    }    
+    }
     $from = $_GET['from'];
     $to = $_GET['to'];
     $form = intval($_GET['form']);
@@ -763,7 +763,7 @@
             $labels[] = date($denominator, strtotime($this_date));
             $outputV[] = intval($all_data[$this_date]['views']);
             $outputS[] = intval($all_data[$this_date]['submissions']);
-            $outputP[] = intval($all_data[$this_date]['payment']);            
+            $outputP[] = intval($all_data[$this_date]['payment']);
           }
         } else {
           if (in_array(date($denominator, strtotime($this_date)), $labels)) {
@@ -953,7 +953,7 @@
           status_header( 200 );
         }
       }
-      wp_enqueue_style('formcraft-common', plugins_url('dist/formcraft-common.css', __FILE__), array(), $fc_meta['version']);      
+      wp_enqueue_style('formcraft-common', plugins_url('dist/formcraft-common.css', __FILE__), array(), $fc_meta['version']);
       wp_enqueue_style('formcraft-form', plugins_url( 'dist/form.css', __FILE__ ),array(), $fc_meta['version']);
     }
     add_action( 'admin_enqueue_scripts', 'formcraft3_admin_scripts' );
@@ -964,10 +964,10 @@
         wp_enqueue_style('fc-icon', plugins_url( 'assets/formcraft-icon.css', __FILE__ ), array(), $fc_meta['version']);
       }
       if (function_exists('register_block_type') && function_exists('has_blocks') && $screen->base === 'post') {
-        wp_enqueue_style('fc-block', plugins_url( 'assets/formcraft-block.css', __FILE__ ), array(), $fc_meta['version']);      
+        wp_enqueue_style('fc-block', plugins_url( 'assets/formcraft-block.css', __FILE__ ), array(), $fc_meta['version']);
         wp_enqueue_script('fc-block', plugins_url( 'dist/formcraft-admin.js', __FILE__ ), array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components' ), $fc_meta['version']);
         $forms = $wpdb->get_results( "SELECT id, name, modified FROM $fc_forms_table LIMIT 0, 999", ARRAY_A );
-        wp_localize_script( 'fc-block', 'FormCraftGlobal', 
+        wp_localize_script( 'fc-block', 'FormCraftGlobal',
           array(
             'ajaxurl' => admin_url('admin-ajax.php'),
             'forms' => $forms,
@@ -975,7 +975,7 @@
           )
         );
       }
-    }    
+    }
 
     /* Custom Add Form Button for the WP Editor */
     add_action( 'media_buttons', 'formcraft3_custom_button');
@@ -1076,10 +1076,10 @@
       global $fc_meta, $fc_forms_table, $fc_views_table, $wpdb;
       if ( !strpos($_SERVER["REQUEST_URI"], '?preview=true') && ctype_digit($form_id)) {
         setcookie("fc_sb_".$form_id, true, time() + (10 * 365 * 24 * 60 * 60), '/');
-      }      
+      }
       if (get_site_option('f3_disable_analytics')) {
         return false;
-      }      
+      }
       if ( !strpos($_SERVER["REQUEST_URI"], '?preview=true') && ctype_digit($form_id)) {
         $time = date('Y-m-d 00:00:00', time() + formcraft3_offset());
         $query = $wpdb->prepare("SELECT counter FROM $fc_forms_table WHERE id = %d", $form_id);
@@ -1161,7 +1161,7 @@
       if ( is_user_logged_in() && current_user_can($fc_meta['user_can']) && isset($_GET['formcraft3_export_all']) ) {
 
         echo "DONE";
-        
+
         $forms = $wpdb->get_results( "SELECT id, name, builder, counter FROM $fc_forms_table", ARRAY_A );
 
         $result = [];
@@ -1180,12 +1180,12 @@
           $result[$form['id']]['submissions'] = empty($entries) ? null : $entries;
 
           $query = $wpdb->prepare("SELECT id, uniq_key, name, created, file_url FROM $fc_files_table WHERE form = %d LIMIT %d, %d", $form['id'], 0, 100000);
-          $entries = $wpdb->get_results( $query, ARRAY_A );    
+          $entries = $wpdb->get_results( $query, ARRAY_A );
           $result[$form['id']]['files'] = empty($entries) ? null : $entries;
 
           $query = $wpdb->prepare("SELECT id, views, submissions, payment, _date FROM $fc_views_table WHERE form = %d LIMIT %d, %d", $form['id'], 0, 500000);
-          $entries = $wpdb->get_results( $query, ARRAY_A );    
-          $result[$form['id']]['views'] = empty($entries) ? null : $entries;        
+          $entries = $wpdb->get_results( $query, ARRAY_A );
+          $result[$form['id']]['views'] = empty($entries) ? null : $entries;
 
         }
 
@@ -1195,7 +1195,7 @@
         header("Expires: 0");
         print json_encode($result);
         die();
-      }      
+      }
 
       if (is_user_logged_in() && current_user_can($fc_meta['user_can']) && isset($_GET['formcraft3_export_form']) && ctype_digit($_GET['formcraft3_export_form']) ) {
         if ( !current_user_can($fc_meta['user_can']) ) { die(); }
@@ -1240,7 +1240,7 @@
 
         $query = $wpdb->prepare("SELECT name FROM $fc_forms_table WHERE id = %d", $exportFormID);
         $form_name = $wpdb->get_var($query);
-        $query = $wpdb->prepare("SELECT meta_builder FROM $fc_forms_table WHERE id = %d", $exportFormID);        
+        $query = $wpdb->prepare("SELECT meta_builder FROM $fc_forms_table WHERE id = %d", $exportFormID);
         $meta = $wpdb->get_var($query);
         if ($meta == NULL) {
           echo "Form does not exist";
@@ -1277,7 +1277,7 @@
             $output[$i][] = isset($new_content[$value2['identifier']]) ? $new_content[$value2['identifier']] : '';
           }
           $created_date = get_date_from_gmt(date('Y-m-d H:i:s', $entry['created']), get_option('date_format'));
-          $created_time = get_date_from_gmt(date('Y-m-d H:i:s', $entry['created']), get_option('time_format'));          
+          $created_time = get_date_from_gmt(date('Y-m-d H:i:s', $entry['created']), get_option('time_format'));
           $output[$i][] = $created_date . ' ' . $created_time;
           $i++;
         }
@@ -1362,10 +1362,10 @@
   function formcraft3_get_insights() {
     global $fc_meta, $fc_forms_table, $fc_submissions_table, $wpdb;
     $formID = $_GET['form'];
-    $nonce = $_REQUEST['formcraft3_wpnonce'];    
+    $nonce = $_REQUEST['formcraft3_wpnonce'];
     if (!wp_verify_nonce( $nonce, 'formcraft3_wpnonce')) {
       exit;
-    }    
+    }
     if (!ctype_digit($formID)) {
       die();
     }
@@ -1482,7 +1482,7 @@
     $nonce = $_REQUEST['formcraft3_wpnonce'];
     if (!wp_verify_nonce( $nonce, 'formcraft3_wpnonce')) {
       exit;
-    }    
+    }
     if ( $fc_meta['preview_mode'] == true ) {
       echo json_encode(array('failed'=>esc_html__('Cannot reset data in demo mode', 'formcraft'))); die();
     }
@@ -1508,10 +1508,10 @@
   add_action( 'wp_ajax_formcraft3_get_files', 'formcraft3_get_files' );
   function formcraft3_get_files() {
     global $fc_meta, $fc_files_table, $wpdb;
-    $nonce = $_REQUEST['formcraft3_wpnonce'];    
+    $nonce = $_REQUEST['formcraft3_wpnonce'];
     if (!wp_verify_nonce( $nonce, 'formcraft3_wpnonce')) {
       exit;
-    }    
+    }
     if (!current_user_can($fc_meta['user_can'])) {
       die();
     }
@@ -1566,14 +1566,14 @@
     $nonce = $_REQUEST['formcraft3_wpnonce'];
     if (!wp_verify_nonce( $nonce, 'formcraft3_wpnonce')) {
       exit;
-    }    
+    }
     if (!is_readable($file_path)) {
       echo json_encode(array('html'=> "<div>".esc_html__('Could not read template file', 'formcraft')."</div>"));
       die();
     }
     require_once(ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php');
-    require_once(ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php'); 
-    $FSD = new WP_Filesystem_Direct(false);    
+    require_once(ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php');
+    $FSD = new WP_Filesystem_Direct(false);
     $content = $FSD->get_contents($file_path);
     $content = json_decode($content);
     $meta = json_decode($content->meta_builder, 1);
@@ -1583,7 +1583,7 @@
       $html = wp_unslash($content->html);
       if ( substr($html,0,10) == 'rawdeflate' ) {
         $html = gzinflate(base64_decode(rawurldecode(substr($html,11))),0);
-      }      
+      }
       $html = str_replace($content->old_url, site_url(), $html);
       if ( !empty($meta['config']['Custom_CSS']) ) {
         $html .= "<style type='text/css' scoped='scoped'>".$meta['config']['Custom_CSS']."</style>";
@@ -1650,7 +1650,7 @@
     $nonce = $_REQUEST['formcraft3_wpnonce'];
     if (!wp_verify_nonce($nonce, 'formcraft3_wpnonce')) {
       exit;
-    }    
+    }
 
     if ( empty($postData['emails']) ) {
       echo json_encode(array('failed' => esc_html__('No email specified', 'formcraft')));
@@ -1706,7 +1706,7 @@
         $mail->Body = wp_kses(__("Hey,<br><br>This is a test email sent from FormCraft, for WordPress. If you have received this email, it means your settings are working correctly.", 'formcraft'), $fc_meta['basic_html']);
         $mail->AltBody = esc_html__("Hey,\nThis is a test email sent from FormCraft, for WordPress. If you have received this email, it means your settings are working correctly.", 'formcraft');
         ob_start();
-        if (!$mail->send()) {      
+        if (!$mail->send()) {
           $output = ob_get_clean();
           $failed_msg = $mail->ErrorInfo;
           echo json_encode(array('failed' => $failed_msg, 'debug' => $output));
@@ -1767,7 +1767,7 @@
       $url = parse_url(urldecode($_GET['URL']));
       if ( $url['host'] !== "formcraft-wp.com" ) {
         echo json_encode(array('failed' => 'Invalid URL')); die();
-      }      
+      }
       $response = wp_remote_get($_GET['URL'], $args);
       if ( is_wp_error( $response ) ) {
         echo json_encode(array('failed' => $response->get_error_message()));
@@ -1784,7 +1784,7 @@
     global $wpdb, $fc_meta, $fc_files_table;
     if (!isset($_POST['id'])) {
       die();
-    }  
+    }
     $uniq_key = esc_sql($_POST['id']);
     $query = $wpdb->prepare("SELECT file_path FROM $fc_files_table WHERE uniq_key = %s", $uniq_key);
     $file_row = $wpdb->get_row($query, ARRAY_A);
@@ -1810,7 +1810,7 @@
     $nonce = $_REQUEST['formcraft3_wpnonce'];
     if (!wp_verify_nonce($nonce, 'formcraft3_wpnonce')) {
       exit;
-    }    
+    }
     $total = 0;
     foreach ($_GET['files'] as $key => $value) {
       if (!ctype_digit($value)) {
@@ -1830,11 +1830,11 @@
   add_action( 'wp_ajax_formcraft3_file_upload', 'formcraft3_file_upload' );
   add_action( 'wp_ajax_nopriv_formcraft3_file_upload', 'formcraft3_file_upload' );
   function formcraft3_file_upload() {
-    global $wpdb, $fc_meta, $fc_files_table;  
+    global $wpdb, $fc_meta, $fc_files_table;
 
     require_once(ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php');
     require_once(ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php');
-  
+
     if (isset($_FILES['files'])) {
       foreach ($_FILES as $key => $file) {
         if (intval($file['size']) == 0) {
@@ -1849,7 +1849,7 @@
 
         if ($is_valid['type'] === false) {
           echo json_encode(array('failed'=>'true','debug' => esc_html__('Invalid File Format','formcraft') ));
-          die();          
+          die();
         }
 
         $filename = sanitize_file_name($file['name']);
@@ -1880,7 +1880,7 @@
         }
         if ( ! defined( 'FS_CHMOD_FILE' ) ) {
             define( 'FS_CHMOD_FILE', ( fileperms( ABSPATH . 'index.php' ) & 0777 | 0644 ) );
-        }         
+        }
         $FSD = new WP_Filesystem_Direct(false);
 
         $file_done = formcraft3_upload_bits($filename_new, null, $FSD->get_contents($file["tmp_name"]), null, $_GET['id']);
@@ -1934,7 +1934,7 @@
         }
         if ( ! defined( 'FS_CHMOD_FILE' ) ) {
             define( 'FS_CHMOD_FILE', ( fileperms( ABSPATH . 'index.php' ) & 0777 | 0644 ) );
-        }         
+        }
         $FSD = new WP_Filesystem_Direct(false);
         $file = formcraft3_upload_bits($filename, null, $FSD->get_contents($_FILES['form_file']['tmp_name']));
         if ($file['error']==true) {
@@ -1963,10 +1963,10 @@
     add_submenu_page('formcraft-dashboard', 'FormCraft Insights', esc_html__('Insights', 'formcraft'), $fc_meta['user_can'], 'formcraft-insights', 'formcraft3_dashboard_page' );
     add_submenu_page('formcraft-dashboard', 'FormCraft Uploads', esc_html__('Uploads', 'formcraft'), $fc_meta['user_can'], 'formcraft-uploads', 'formcraft3_dashboard_page' );
     if ( $fc_meta['preview_mode'] == false ) {
-      add_submenu_page('formcraft-dashboard', 'FormCraft License Info', esc_html__('License', 'formcraft'), $fc_meta['user_can'], 'formcraft-license', 'formcraft3_dashboard_page' );      
+      add_submenu_page('formcraft-dashboard', 'FormCraft License Info', esc_html__('License', 'formcraft'), $fc_meta['user_can'], 'formcraft-license', 'formcraft3_dashboard_page' );
     }
 
-    add_action( 'admin_enqueue_scripts', 'formcraft3_admin_assets' );    
+    add_action( 'admin_enqueue_scripts', 'formcraft3_admin_assets' );
   }
   function formcraft3_dashboard_page() {
     global $wp_version, $fc_meta;
@@ -1974,7 +1974,7 @@
     if (isset($_GET['id'])) {
       require_once('views/builder.php');
     } else {
-      echo wp_nonce_field('formcraft3_wpnonce', 'formcraft3_wpnonce', true, false)."<div id='formcraft_dashboard' class='formcraft-css'></div>";      
+      echo wp_nonce_field('formcraft3_wpnonce', 'formcraft3_wpnonce', true, false)."<div id='formcraft_dashboard' class='formcraft-css'></div>";
     }
   }
   function formcraft3_update_datetime_unix() {
@@ -2043,7 +2043,7 @@
     }
 
     $page = explode('formcraft-', $hook);
-    $page = $page[1];    
+    $page = $page[1];
 
     // Common JS Between Dashboard and Builder
     wp_enqueue_script('jquery');
@@ -2055,18 +2055,18 @@
       wp_enqueue_script('jquery-ui-slider');
       wp_enqueue_script('fc-modal', plugins_url( 'assets/js/src/fc_modal.js', __FILE__ ), array(), $fc_meta['version']);
       wp_enqueue_script('tooltip', plugins_url( 'assets/js/vendor/tooltip.min.js', __FILE__ ));
-      wp_enqueue_script('autosize', plugins_url( 'assets/js/vendor/autosize.js', __FILE__ ), array(), $fc_meta['version']);      
-      
+      wp_enqueue_script('autosize', plugins_url( 'assets/js/vendor/autosize.js', __FILE__ ), array(), $fc_meta['version']);
+
       /* Builder Styles and Scripts */
       wp_enqueue_style('wp-color-picker');
       wp_enqueue_style('formcraft-common', plugins_url('dist/formcraft-common.css', __FILE__), array(), $fc_meta['version']);
-      wp_enqueue_style('formcraft-builder', plugins_url('dist/formcraft-builder.css', __FILE__), array(), $fc_meta['version']);     
-      wp_enqueue_style('formcraft-form', plugins_url('dist/form.css', __FILE__), array(), $fc_meta['version']);     
+      wp_enqueue_style('formcraft-builder', plugins_url('dist/formcraft-builder.css', __FILE__), array(), $fc_meta['version']);
+      wp_enqueue_style('formcraft-form', plugins_url('dist/form.css', __FILE__), array(), $fc_meta['version']);
 
       wp_enqueue_script( 'wp-color-picker' );
 
       wp_enqueue_script('selectize', plugins_url( 'assets/js/vendor/selectize.min.js', __FILE__ ),array(), $fc_meta['version']);
-      wp_enqueue_script('angular', plugins_url( 'assets/js/vendor/angular-1.5.0.min.js', __FILE__ ),array(), $fc_meta['version']);
+      wp_enqueue_script('angular', plugins_url( 'assets/js/vendor/angular-1.8.3.min.js', __FILE__ ),array(), $fc_meta['version']);
       wp_enqueue_script('ui-sortable', plugins_url( 'assets/js/vendor/ui.sortable.min.js', __FILE__ ), array('jquery-ui-core','jquery-ui-widget','jquery-ui-mouse','jquery-ui-sortable'), $fc_meta['version']);
 
       wp_enqueue_script('textAngular-rangy', plugins_url( 'lib/textAngular/textAngular-rangy.min.js', __FILE__ ),array(), $fc_meta['version']);
@@ -2179,7 +2179,7 @@
         $locale = strtolower(str_replace('_','-',get_locale()));
         $localeLanguage = substr($locale, 0, strpos($locale, '-'));
         if (file_exists(plugin_dir_path( __FILE__ ) . 'lib/moment/locale/'.$locale.'.js')) {
-          wp_enqueue_script('moment-'.$locale, plugins_url( 'lib/moment/locale/'.$locale.'.js', __FILE__ ), array(), $fc_meta['version']); 
+          wp_enqueue_script('moment-'.$locale, plugins_url( 'lib/moment/locale/'.$locale.'.js', __FILE__ ), array(), $fc_meta['version']);
         } else if (file_exists(plugin_dir_path( __FILE__ ) . 'lib/moment/locale/'.$localeLanguage.'.js')) {
           wp_enqueue_script('moment-'.$localeLanguage, plugins_url( 'lib/moment/locale/'.$localeLanguage.'.js', __FILE__ ), array(), $fc_meta['version']);
         }
@@ -2189,7 +2189,7 @@
       $load_chart = array('dashboard', 'insights');
       if (in_array($page, $load_chart)) {
         wp_enqueue_script('chart', plugins_url( 'assets/js/vendor/chart.min.js', __FILE__ ));
-      }       
+      }
 
       // Load FormCraft Admin CSS for Some Pages
       $load_admin = array('dashboard', 'entries', 'insights', 'uploads', 'license');
@@ -2447,7 +2447,7 @@
   function formcraft3_upload_bits( $name, $deprecated, $bits, $time = null, $form = null ) {
 
     require_once(ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php');
-    require_once(ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php');    
+    require_once(ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php');
 
     if ( !empty( $deprecated ) )
       _deprecated_argument( __FUNCTION__, '2.0' );
@@ -2482,14 +2482,14 @@
     }
     if ( ! defined( 'FS_CHMOD_FILE' ) ) {
         define( 'FS_CHMOD_FILE', ( fileperms( ABSPATH . 'index.php' ) & 0777 | 0644 ) );
-    }     
+    }
     $FSD = new WP_Filesystem_Direct(false);
 
     $filename = wp_unique_filename( $upload['path'], $name );
     $new_file = $upload['path'] . "/$filename";
 
     if ( ! wp_mkdir_p( dirname( $new_file ) ) ) {
-      if ( 0 === strpos( $upload['basedir'], ABSPATH ) ) { 
+      if ( 0 === strpos( $upload['basedir'], ABSPATH ) ) {
         $error_path = str_replace( ABSPATH, '', $upload['basedir'] ) . $upload['subdir'];
       } else {
         $error_path = basename( $upload['basedir'] ) . $upload['subdir'];
@@ -2498,7 +2498,7 @@
 
     if ( !$FSD->exists($upload['path'].'/index.php') ) {
       $FSD->put_contents($upload['path'].'/index.php', '<?php ?>');
-    }    
+    }
 
     $fileCreated = $FSD->put_contents($new_file, $bits);
 
