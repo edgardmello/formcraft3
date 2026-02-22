@@ -368,17 +368,9 @@
       'sslverify'   => false
     );
     $siteURL = is_multisite() && $fc_meta['f3_multi_site_addon'] === true ? network_site_url() : site_url();
-
-    $ch = curl_init(); 
-    curl_setopt($ch, CURLOPT_URL, "http://formcraft-wp.com?type=register_license&key=".rawurlencode($licenseKey)."&site=".rawurlencode($siteURL)."&email=".rawurlencode($licenseEmail).'&v=2'); 
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); 
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_VERBOSE, true); 
-    curl_setopt($ch, CURLOPT_TIMEOUT, 10);  
-    $response = curl_exec($ch);
-    curl_close($ch);
+    $url = "http://formcraft-wp.com?type=register_license&key=".rawurlencode($licenseKey)."&site=".rawurlencode($siteURL)."&email=".rawurlencode($licenseEmail).'&v=2';
+    $response_api = \FormCraft\Security\Sanitizer::remoteGet($url, ['sslverify' => false, 'timeout' => 10]);
+    $response = is_wp_error($response_api) ? null : wp_remote_retrieve_body($response_api);
 
     if ( $response==NULL || empty($response) ) {
       echo json_encode(array('failed'=>esc_html__('Could not connect','formcraft')));
@@ -653,7 +645,7 @@
     }
     $query = $wpdb->prepare("SELECT addons FROM $fc_forms_table WHERE id = %d", $id);
     $qry = $wpdb->get_var( $query );
-    $data = json_decode(stripcslashes($qry),1);
+    $data = \FormCraft\Security\Sanitizer::decodeDbJson($qry, true);
     if ( isset($data[$addon]) )
     {
       return $data[$addon];
@@ -870,7 +862,7 @@
       if (formcraft3_check_form_page_access($form_id)) {
         $query = $wpdb->prepare("SELECT meta_builder FROM $fc_forms_table WHERE id = %d", $form_id);
         $query = $wpdb->get_var( $query );
-        $query = json_decode( stripcslashes($query) , 1);
+        $query = \FormCraft\Security\Sanitizer::decodeDbJson($query, true);
         wp_enqueue_style('formcraft-form-page', plugins_url( 'dist/form-page.css', __FILE__ ),array(), $fc_meta['version']);
         add_action('wp_head','formcraft3_wp_head');
         echo '<!DOCTYPE html>
@@ -1276,7 +1268,7 @@
           echo "Form does not exist";
           die();
         }
-        $meta = json_decode(stripcslashes($meta),1);
+        $meta = \FormCraft\Security\Sanitizer::decodeDbJson($meta, true);
         $meta = $meta['fields'];
         $query = $wpdb->prepare("SELECT id, content, created FROM $fc_submissions_table WHERE form = %d LIMIT %d, %d", $exportFormID, $exportFrom, $exportTo);
         $entries = $wpdb->get_results( $query, ARRAY_A );
@@ -1294,7 +1286,7 @@
         }
         $output[0][] = 'Created';
         foreach ($entries as $key => $entry) {
-          $content = json_decode(stripcslashes($entry['content']),1);
+          $content = \FormCraft\Security\Sanitizer::decodeDbJson($entry['content'], true);
           $new_content = array();
           foreach ($content as $key2 => $value2) {
             $new_content[$value2['identifier']] = $value2['type']=='fileupload' ? $value2['url'] : $value2['value'];
@@ -1377,7 +1369,7 @@
     if ($meta==NULL) {
       return esc_html__('This form does not exist', 'formcraft');
     }
-    $meta = json_decode(stripcslashes($meta),1);
+    $meta = \FormCraft\Security\Sanitizer::decodeDbJson($meta, true);
     $load_datepicker = false;
     $load_slider = false;
     $load_fileupload = false;
@@ -1504,7 +1496,7 @@
     $html = str_replace('fc_form_', 'fc-form-', $html);
     $html = str_replace('fc_form ', 'fc-form ', $html);
     $html = str_replace(' has-input', ' ', $html);
-    $html = stripcslashes($html);
+    $html = wp_unslash($html);
 
     $pattern = get_shortcode_regex();
     preg_match_all('/'. $pattern .'/s', $html, $matches);
@@ -1522,7 +1514,7 @@
         $query = $wpdb->prepare("SELECT content FROM $fc_progress_table WHERE uniq_key = %s", $cookie);
         $pre_data = $wpdb->get_var($query);
         if ($pre_data != null && $pre_data != '' && $pre_data != 'null') {
-          $pre_data = json_decode(stripcslashes($pre_data), 1);
+          $pre_data = \FormCraft\Security\Sanitizer::decodeDbJson($pre_data, true);
           foreach ($pre_data as $key => $value) {
             if ( !is_array($value) && $value == '' ) {
               unset($pre_data[$key]);
@@ -1669,7 +1661,7 @@
       $formData = array();
       $formData['html'] = $existing_form['html'];
       $formData['builder'] = $existing_form['builder'];
-      $formData['addons'] = json_encode(json_decode(stripcslashes($existing_form['addons'])));
+      $formData['addons'] = json_encode(json_decode(wp_unslash($existing_form['addons'])));
       $formData['meta_builder'] = $existing_form['meta_builder'];
       break;
       
@@ -1744,12 +1736,12 @@
       $formData['addons'] = $formData['addons'] == null ? false : $formData['addons'];
       $formData['old_url'] = $formData['old_url']==null ? false : $formData['old_url'];
       if ($formData['meta_builder'] != false) {
-        $formData['meta_builder'] = json_decode(stripcslashes($formData['meta_builder']),1);
+        $formData['meta_builder'] = \FormCraft\Security\Sanitizer::decodeDbJson($formData['meta_builder'], true);
         $formData['meta_builder'] = $formData['meta_builder']['config'];
         $formData['meta_builder'] = json_encode($formData['meta_builder']);
       }
       if ($formData['addons'] != false) {
-        $formData['addons'] = stripcslashes($formData['addons']);
+        $formData['addons'] = wp_unslash($formData['addons']);
       }
 
       $formData['new_url'] = site_url();
@@ -1807,7 +1799,7 @@
     }
     $query = $wpdb->prepare("SELECT meta_builder FROM $fc_forms_table WHERE id=%d", $formID);
     $currentForm = $wpdb->get_var( $query );
-    $currentForm = json_decode(stripcslashes($currentForm), 1);
+    $currentForm = \FormCraft\Security\Sanitizer::decodeDbJson($currentForm, true);
     $chart = array();
     foreach ($currentForm as $pageNos => $formPage) {
       foreach ($formPage as $key => $value) {
@@ -1842,7 +1834,7 @@
       $entries = $wpdb->get_results( $query, ARRAY_A );
       $current = $current + $size;
       foreach ($entries as $entryKey => $value) {
-        $entry = json_decode(stripcslashes($value['content']), 1);
+        $entry = \FormCraft\Security\Sanitizer::decodeDbJson($value['content'], true);
         foreach ($entry as $fieldKey => $field) {
           if ( isset($chart[$field['identifier']]) ) {
             $chart[$field['identifier']]['totalAnalyzed']++;
@@ -2000,7 +1992,7 @@
 
     if ( is_array($forms) && count($forms) > 0 ) {
       foreach ($forms as $key => $value) {
-        $forms[$key]['name'] = $forms[$key]['name']=='' ? '(No Name)' : stripcslashes($forms[$key]['name']);
+        $forms[$key]['name'] = $forms[$key]['name']=='' ? '(No Name)' : wp_unslash($forms[$key]['name']);
       }
       echo json_encode(array('pages'=>ceil($total/$per_page),'forms'=>$forms,'total'=>$total));
       die();
@@ -2150,7 +2142,7 @@
     }
     $query = $wpdb->prepare("SELECT content FROM $fc_submissions_table WHERE id = %d", $entryID);
     $existing = $wpdb->get_var( $query );
-    $existing = json_decode(stripcslashes($existing), 1);
+    $existing = \FormCraft\Security\Sanitizer::decodeDbJson($existing, true);
     foreach ($existing as $key => $value) {
       if (isset($content[$value['identifier']])) {
         $content[$value['identifier']] = explode(PHP_EOL, $content[$value['identifier']]);
@@ -2188,7 +2180,7 @@
     if (!isset($content->html)) {
       echo json_encode(array('html'=> "<div>".esc_html__('Could not read template file', 'formcraft')."</div>"));
     } else {
-      $html = stripcslashes($content->html);
+      $html = wp_unslash($content->html);
       if ( substr($html,0,10) == 'rawdeflate' ) {
         $html = gzinflate(base64_decode(rawurldecode(substr($html,11))),0);
       }      
@@ -2375,9 +2367,9 @@
     }    
     $id = $_POST['id'];
     $meta = $wpdb->get_var( $wpdb->prepare("SELECT meta_builder FROM $fc_forms_table WHERE id = %d", $id) );
-    $meta = json_decode(stripcslashes($meta), 1);
+    $meta = \FormCraft\Security\Sanitizer::decodeDbJson($meta, true);
 
-    $fieldLabels = json_decode(stripcslashes($_POST['fieldLabels']), 1);
+    $fieldLabels = \FormCraft\Security\Sanitizer::decodeDbJson($_POST['fieldLabels'], true);
 
     /* Allow Editing of Meta */
     $meta = apply_filters('formcraft_filter_entry_meta', $meta);
@@ -2391,7 +2383,7 @@
     $integrations['not_triggered'] = array();
     $_POST['trigger_integration'] = isset($_POST['triggerIntegration']) ? $_POST['triggerIntegration'] : $_POST['trigger_integration'];
     $_POST['trigger_integration'] = isset($_POST['trigger_integration']) ? $_POST['trigger_integration'] : '';
-    $integrations['triggered'] = json_decode(stripcslashes(urldecode($_POST['trigger_integration'])), 1);
+    $integrations['triggered'] = \FormCraft\Security\Sanitizer::decodeDbJson(urldecode($_POST['trigger_integration']), true);
     $integrations['triggered'] = !empty($integrations['triggered']) && count($integrations['triggered']) > 0 ? array_unique($integrations['triggered']) : $integrations['triggered'];
     if (isset($meta['config']['Logic'])) {
       foreach ($meta['config']['Logic'] as $key => $logicRow) {
@@ -2462,7 +2454,7 @@
           $spaces = isset($field['elementDefaults']['Validation']['spaces']) && $field['elementDefaults']['Validation']['spaces']==true ? true : false;
           $value_to_check = $spaces==true ? str_replace(' ', '', $value) : $value;
           $value = is_array($value) ? $value[0] : $value;
-          $value = stripcslashes($value);
+          $value = wp_unslash($value);
           foreach ($field['elementDefaults']['Validation'] as $type => $validation) {
             if (empty($value)){
               continue;
@@ -3268,7 +3260,7 @@
       echo json_encode(array('failed'=>esc_html__('Invalid Form ID')));
       die();
     }
-    $meta_builder = substr($_POST['meta_builder'], 0, 10) === 'rawdeflate' ? json_decode(gzinflate(base64_decode(rawurldecode(substr($_POST['meta_builder'], 11))),0), 1) : json_decode(stripcslashes($_POST['meta_builder']), 1);
+    $meta_builder = substr($_POST['meta_builder'], 0, 10) === 'rawdeflate' ? json_decode(gzinflate(base64_decode(rawurldecode(substr($_POST['meta_builder'], 11))),0), 1) : \FormCraft\Security\Sanitizer::decodeDbJson($_POST['meta_builder'], true);
     $name = $meta_builder['config']['form_name'];
     $builder = $_POST['builder'];
     $addons = esc_sql(stripslashes($_POST['addons']));
