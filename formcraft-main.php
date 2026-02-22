@@ -11,6 +11,21 @@
   Text Domain: formcraft
   */
 
+  // Basic PSR-4 autoloader for FormCraft namespace mapped to src/
+  spl_autoload_register(function ($class) {
+      $prefix = 'FormCraft\\';
+      $base_dir = plugin_dir_path(__FILE__) . 'src/';
+      $len = strlen($prefix);
+      if (strncmp($prefix, $class, $len) !== 0) {
+          return;
+      }
+      $relative_class = substr($class, $len);
+      $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
+      if (file_exists($file)) {
+          require $file;
+      }
+  });
+
   global $fc_meta, $fc_forms_table, $fc_progress_table, $fc_submissions_table, $fc_views_table, $fc_files_table, $wpdb, $fc_addons, $fc_translate;
   $fc_addons = array();
   $fc_templates = array();
@@ -838,6 +853,7 @@
     if(formcraft3_check_form_page()) {
       $form_id = formcraft3_check_form_page();
       if (formcraft3_check_form_page_access($form_id)) {
+        status_header(200);
         $query = $wpdb->prepare("SELECT meta_builder FROM $fc_forms_table WHERE id = %d", $form_id);
         $query = $wpdb->get_var( $query );
         $query = \FormCraft\Security\Sanitizer::decodeDbJson($query, true);
@@ -953,6 +969,7 @@
           status_header( 200 );
         }
       }
+      wp_enqueue_style('formcraft-design-tokens', plugins_url('dist/design-tokens.css', __FILE__), array(), $fc_meta['version']);
       wp_enqueue_style('formcraft-common', plugins_url('dist/formcraft-common.css', __FILE__), array(), $fc_meta['version']);
       wp_enqueue_style('formcraft-form', plugins_url( 'dist/form.css', __FILE__ ),array(), $fc_meta['version']);
     }
@@ -987,6 +1004,7 @@
       wp_enqueue_script('fc-modal', plugins_url( 'assets/js/src/fc_modal.js', __FILE__ ), array(), $fc_meta['version']);
       wp_enqueue_script('fc-add-form-button', plugins_url( 'assets/js/src/add-form-button.js', __FILE__ ));
       wp_enqueue_style('fc-add-form-button', plugins_url( 'dist/add-form-button.css', __FILE__ ),array(), $fc_meta['version']);
+      wp_enqueue_style('formcraft-design-tokens', plugins_url('dist/design-tokens.css', __FILE__), array(), $fc_meta['version']);
       wp_enqueue_style('formcraft-common', plugins_url('dist/formcraft-common.css', __FILE__), array(), $fc_meta['version']);
       echo $button;
     }
@@ -2059,6 +2077,7 @@
 
       /* Builder Styles and Scripts */
       wp_enqueue_style('wp-color-picker');
+      wp_enqueue_style('formcraft-design-tokens', plugins_url('dist/design-tokens.css', __FILE__), array(), $fc_meta['version']);
       wp_enqueue_style('formcraft-common', plugins_url('dist/formcraft-common.css', __FILE__), array(), $fc_meta['version']);
       wp_enqueue_style('formcraft-builder', plugins_url('dist/formcraft-builder.css', __FILE__), array(), $fc_meta['version']);
       wp_enqueue_style('formcraft-form', plugins_url('dist/form.css', __FILE__), array(), $fc_meta['version']);
@@ -2166,6 +2185,7 @@
       }
 
       // Common CSS Files for All Pages
+      wp_enqueue_style('formcraft-design-tokens', plugins_url('dist/design-tokens.css', __FILE__), array(), $fc_meta['version']);
       wp_enqueue_style('formcraft-common', plugins_url('dist/formcraft-common.css', __FILE__), array(), $fc_meta['version']);
 
       // Load React for Some Pages

@@ -890,7 +890,7 @@
 		font-size: 9px;
 		padding: 1px;
 		color: #4FB34F;
-		background-color: white;
+		background-color: var(--fc-color-surface);
 		border-radius: 100px;
 		vertical-align: middle;
 		margin-right: 2px;
@@ -900,7 +900,7 @@
 		animation: slideLeft .2s;
 		padding: 9px 14px;
 		font-weight: 600;
-		background-color: #eee;
+		background-color: var(--fc-color-border);
 		text-align: center;
 		border-radius: 3px;
 		margin-top: 6px;
@@ -908,17 +908,17 @@
 		-webkit-box-shadow: 0 1px 0 rgba(0,0,0,.7);
 		cursor: pointer;
 		&.toast-success {
-			color: white;
+			color: var(--fc-color-surface);
 			background-color: #4FB34F;
 		}
 		&.toast-error {
-			color: white;
+			color: var(--fc-color-surface);
 			background-color: rgb(244, 94, 94);
 		}
 	}
 }
 #ui-datepicker-div.fc-datepicker {
-	background-color: white;
+	background-color: var(--fc-color-surface);
 	box-shadow: 0 0 0 0.5px rgba(0,20,40,.1), 0 2px 8px 0 rgba(50,55,90,.2);
 	padding: 0px;
 	margin-left: 0px;
@@ -936,7 +936,7 @@
 	}
 	.ui-datepicker-header {
 		text-align: center;
-		background-color: #48e;
+		background-color: var(--fc-color-primary);
 		border-bottom: 1px solid #3b77d1;
 		-webkit-user-select: none;
 		-moz-user-select: none;
@@ -944,7 +944,7 @@
 		-o-user-select: none;
 		user-select: none;
 		border-radius: 0px;
-		color: #fff;
+		color: var(--fc-color-surface);
 	}
 	.ui-datepicker-prev,
 	.ui-datepicker-next {
@@ -953,7 +953,7 @@
 		box-sizing: border-box;      
 		padding: 0px 13px 0px 13px;
 		overflow: hidden;
-		color: #eee;
+		color: var(--fc-color-border);
 		font-size: 1.1em;
 		height: 2.95em;
 		line-height: 2.95em;
@@ -962,7 +962,7 @@
 		border: 0px !important;
 		cursor: pointer;
 		&:hover {
-			color: #fff;
+			color: var(--fc-color-surface);
 			background-color: #3b77d1;
 		}
 	}
@@ -999,7 +999,7 @@
 		width: 4.5em;
 		height: 2.3em;
 		cursor: pointer;
-		color: #fff !important;
+		color: var(--fc-color-surface) !important;
 		border-radius: 4px;
 		outline: none;
 		box-shadow: none;
@@ -1027,7 +1027,7 @@
 		border-collapse: collapse;
 		border: 0px;
 		th {
-			color: #48e;
+			color: var(--fc-color-primary);
 			font-size: 1em;
 			text-align: center;
 			background-color: transparent !important;
@@ -1058,7 +1058,7 @@
 			border-left-width: 0px;
 		}
 		td.ui-datepicker-today a {
-			color: #48e;
+			color: var(--fc-color-primary);
 		}
 		td a,
 		td span {
@@ -1086,19 +1086,19 @@
 			border-bottom-color: transparent;
 		}
 		.ui-state-disabled span {
-			color: #ccc;
+			color: var(--fc-color-border);
 			cursor: default;
 		}
 		td.ui-datepicker-other-month span
 		{
-			color: white;
+			color: var(--fc-color-surface);
 		}
 		td.ui-datepicker-current-day a,
 		td a:hover {
 			font-family: inherit;
 			position: absolute;
 			padding: 0;
-			background-color: #eee;
+			background-color: var(--fc-color-border);
 			border-radius: 0px;
 			z-index: 101;
 		}
@@ -1207,7 +1207,7 @@
 	.fc-spinner > span {
 		width: 18px;
 		height: 18px;
-		background-color: #48e;
+		background-color: var(--fc-color-primary);
 		border-radius: 100%;
 		display: inline-block;
 		-webkit-animation: bouncedelay 1.4s infinite ease-in-out;
@@ -1270,8 +1270,8 @@
 		border-top-color: #c6c6c6;
 		border-left-color: #c9c9c9;
 		border-radius: 2px;
-		box-shadow: 1px 1px 0px #eee inset;
-		-webkit-box-shadow: 1px 1px 0px #eee inset;
+		box-shadow: 1px 1px 0px var(--fc-color-border) inset;
+		-webkit-box-shadow: 1px 1px 0px var(--fc-color-border) inset;
 		padding: 9px 12px 8px 12px;
 		font-size: 1em;
 		font-family: inherit;
@@ -1319,14 +1319,14 @@
 	.fc-form .form-element-html input[type="url"]:focus,
 	.fc-form .form-element-html input[type="week"]:focus,
 	.fc-form .form-element-html textarea:focus {
-		border-color: #48e;
+		border-color: var(--fc-color-primary);
 		outline: none;
 		box-shadow: none;
 	}
 	.response
 	{
 		padding: 5px 7px;
-		color: #666;
+		color: var(--fc-color-text-muted);
 		display: inline-block;
 	}
 	.filename {
@@ -1338,7 +1338,7 @@
 		font-weight: normal;
 		display: inline-block;
 		.icon-ok {
-			color: #777;
+			color: var(--fc-color-text-muted);
 			display: inline-block;
 			font-size: 11px;
 			-webkit-animation: fadeIn .4s;
@@ -1352,7 +1352,7 @@
 			-webkit-animation: fadeIn .4s;
 			animation: fadeIn .4s;
 			> div {
-				background-color: #999;
+				background-color: var(--fc-color-text-muted);
 				width: 5px;
 				height: 5px;
 				margin: 0px 1px;
@@ -1678,7 +1678,7 @@ html .formcraft-css .icon-meh:before { content: '\e896'; }
 }
 .fc_modal-content {
 	position: relative;
-	background-color: #ffffff;
+	background-color: var(--fc-color-surface);
 	border-radius: 3px;
 	box-shadow: 0 0 0 0.5px rgba(0,20,40,.5), 0 2px 25px 0 rgba(50,55,90,.75);
 	background-clip: padding-box;
@@ -1725,7 +1725,7 @@ html .formcraft-css .icon-meh:before { content: '\e896'; }
 	border-bottom: 1px solid #ddd;
 	font-size: 20px;
 	font-weight: normal;
-	color: #666;
+	color: var(--fc-color-text-muted);
 	border-radius: 3px 3px 0 0 ;
 }
 .fc_modal-header h3
@@ -1744,7 +1744,7 @@ body .fc-trigger-close
 	border: none;
 	font-size: 21px;
 	z-index: 9000;
-	color: #999;
+	color: var(--fc-color-text-muted);
 	cursor: pointer;
 	font-weight: bold;
 	background: transparent;
@@ -1757,7 +1757,7 @@ body .fc-trigger-close
 }
 body .fc_modal .fc_close:hover
 {
-	color: #666;
+	color: var(--fc-color-text-muted);
 	box-shadow: none;
 }
 

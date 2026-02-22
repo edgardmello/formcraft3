@@ -33,6 +33,8 @@ CSS to be used on the form editor page
 		transition: all .2s;
 		height: auto;
 		max-height: none;
+		color: var(--fc-color-text);
+		background-color: var(--fc-color-surface);
 	}
 	input[type='text'],
 	input[type='password'],
@@ -40,9 +42,9 @@ CSS to be used on the form editor page
 	select,
 	textarea,
 	.button-checkbox-group {
-		background-color: white;
+		background-color: var(--fc-color-surface);
 		border-radius: 2px;
-		border: 1px solid darken(@borderColorDarkOne, 4%);
+		border: 1px solid var(--fc-color-border);
 		&:hover {
 			border-color: rgba(155, 170, 190, .70);
 		}
@@ -50,7 +52,7 @@ CSS to be used on the form editor page
 			border-color: rgba(155, 170, 190, .70);
 			box-shadow: 0 3px 6px rgba(0,0,0,.12);
 		}
-	}				
+	}
 	input[type=checkbox],
 	input[type=radio] {
 		min-width: 16px;
@@ -58,9 +60,9 @@ CSS to be used on the form editor page
 		margin-right: 1px;
 	}
 	.input-group {
-		background-color: white;
+		background-color: var(--fc-color-surface);
 		border-radius: 2px;
-		border: 1px solid darken(@borderColorDarkOne, 4%);
+		border: 1px solid var(--fc-color-border);
 		letter-spacing: -4px;
 		label {
 			letter-spacing: 0;
@@ -87,7 +89,8 @@ CSS to be used on the form editor page
 		margin-top: 3px;
 		font-size: 1.12em;
 		display: inline-block;
-		background-color: white;
+		background-color: var(--fc-color-surface);
+		color: var(--fc-color-text);
 		border-radius: 2px;
 		.smoothing();
 		&.type-text {
@@ -101,13 +104,14 @@ CSS to be used on the form editor page
 				&:nth-last-of-type(1) {
 					padding-right: 1.2em;
 				}
-			}			
+			}
 		}
 		label {
 			padding: .65em .375em;
 			display: inline-block;
 			text-align: center;
-			opacity: .5;
+			opacity: .7;
+			color: var(--fc-color-text);
 			text-transform: uppercase;
 			font-weight: 600;
 			vertical-align: top;
@@ -144,7 +148,7 @@ CSS to be used on the form editor page
 			position: absolute;
 			left: -999em;
 		}
-	}	
+	}
 }
 
 #formcraft-builder-cover {
@@ -215,20 +219,20 @@ CSS to be used on the form editor page
 		    margin-top: -0.42em;
 		    font-size: 1.4em;
 		    right: 0.35em;
-			}	
+			}
 			.down-arrow {
 				display: none;
-			}	
+			}
 		}
 		&.show-false {
 			.toggleAddField {
 				display: block;
 				.down-arrow {
 					display: inline-block;
-				}	
+				}
 				.up-arrow {
 					display: none;
-				}	
+				}
 			}
 			button {
 				display: none;
@@ -242,26 +246,25 @@ CSS to be used on the form editor page
 			cursor: pointer;
 			text-align: left;
 			letter-spacing: 0;
-			color: white;
-			border: 1px solid darken(@themeColor, 3%);
+			border: 1px solid var(--fc-color-border);
 			border-left: 0;
 			border-right: 0;
-			background: @themeColor;
+			background: var(--fc-color-surface);
+			color: var(--fc-color-text);
 			padding: .9em 1.2em;
 			width: 100%;
 			margin: 0;
-			margin-top: -1px;			
+			margin-top: -1px;
 			display: block;
 			text-decoration: none;
 			text-transform: uppercase;
 			font-size: .85em;
 			font-weight: 700;
-			text-shadow: 1px 1px 1px rgba(0,0,0,.08);
 			border-radius: 0;
 			.smoothing();
 			&:hover {
-				box-shadow: 0 2px 1px -2px rgba(0,20,40,.3) inset, 0 -2px 1px -2px rgba(0,20,40,.3) inset;
-				background: darken(@themeColor, 5%);
+				background: var(--fc-color-surface-alt);
+				color: var(--fc-color-primary);
 			}
 		}
 		.hover-on-fields {
@@ -323,9 +326,9 @@ CSS to be used on the form editor page
 			letter-spacing: 0;
 			margin: 0;
 			border: 0;
-			margin-left: -1px;			
-			color: white;
-			background: @themeColor;
+			margin-left: -1px;
+			color: var(--fc-color-text);
+			background: var(--fc-color-surface);
 			padding: .1em 1.4em 0;
 			height: 3.8em;
 			line-height: 3.8em;
@@ -334,13 +337,13 @@ CSS to be used on the form editor page
 			text-transform: uppercase;
 			font-size: .95em;
 			font-weight: 700;
-			text-shadow: 1px 1px 1px rgba(0,0,0,.08);
 			border-radius: 0;
+			border-right: 1px solid var(--fc-color-border);
 			.smoothing();
 			&.active-true,
 			&:hover {
-				background: darken(@themeColor, 5%);
-				box-shadow: 1px 0 1px -1px rgba(0,20,40,.35) inset, -2px 0 1px -1px rgba(0,20,40,.35) inset;
+				background: var(--fc-color-surface-alt);
+				color: var(--fc-color-primary);
 			}
 			.formcraft-icon {
 				margin: 0 0.4em 0 -0.4em;
@@ -359,7 +362,7 @@ CSS to be used on the form editor page
 				width: 9px;
 				height: 9px;
 				margin-bottom: -1px;
-				border-color: #fff;
+				border-color: var(--fc-color-surface);
 				border-left-color: darken(@themeColor, 5%);
 				margin-right: .5em;
 			}
@@ -396,9 +399,10 @@ CSS to be used on the form editor page
 			padding: 1.15em 1.05em .95em;
 			font-size: 1.15em;
 			font-weight: 500;
-			border-bottom: 1px solid @borderColor;
-			border-top: 1px solid @borderColor;
-			background-color: @backgroundGreyTwo;
+			border-bottom: 1px solid var(--fc-color-border);
+			border-top: 1px solid var(--fc-color-border);
+			background-color: #ffffff !important;
+			color: #000000 !important;
 			.smoothing();
 		}
 		.read-more-addon {
@@ -416,13 +420,14 @@ CSS to be used on the form editor page
 				padding: 1.15em 1.05em .95em;
 				font-size: 1.15em;
 				font-weight: 500;
-				border-bottom: 1px solid @borderColor;
-				border-top: 1px solid @borderColor;
-				background-color: @backgroundGreyTwo;
+				border-bottom: 1px solid var(--fc-color-border);
+				border-top: 1px solid var(--fc-color-border);
+				background-color: #ffffff !important;
+				color: #000000 !important;
 				.smoothing();
 				cursor: pointer;
 				&:hover {
-					background-color: darken(@backgroundGreyTwo, 2%);
+					background-color: var(--fc-color-surface-alt) !important;
 				}
 				.icon-type-up {
 					display: none;
@@ -467,7 +472,7 @@ CSS to be used on the form editor page
 			    left: 0%;
 			    top: 0%;
 			    color: darken(@green, 5%);
-				}				
+				}
 			}
 			.w-1, .w-2, .w-3, .w2-1, .w2-2, .w2-3, .w-25 {
 				vertical-align: top;
@@ -518,7 +523,7 @@ CSS to be used on the form editor page
 				}
 				span.arrow-right:after {
 					content: '→';
-					color: #48e;
+					color: var(--fc-color-primary);
 					position: absolute;
 					right: 2px;
 					font-size: 13px;
@@ -534,7 +539,7 @@ CSS to be used on the form editor page
 				}
 				&.is-text {
 					padding-top: .72em;
-					padding-bottom: .65em;					
+					padding-bottom: .65em;
 				}
 			}
 			.w2-1 {
@@ -562,7 +567,7 @@ CSS to be used on the form editor page
 				display: inline-block;
 				width: 25%;
 			}
-		}		
+		}
 	}
 	#form_styling_box {
 		.nav-tabs-slide {
@@ -587,13 +592,13 @@ CSS to be used on the form editor page
 				width: 18%;
 			}
 			> span:nth-child(2) {
-				width: 17%;	
+				width: 17%;
 			}
 			> span:nth-child(3) {
-				width: 17%;	
+				width: 17%;
 			}
 			> span:nth-child(4) {
-				width: 26%;	
+				width: 26%;
 			}
 			> span:nth-child(5) {
 				width: 22%;
@@ -615,6 +620,7 @@ CSS to be used on the form editor page
 		.selectize-dropdown .option,
 		.sign-and {
 			padding: .52em .5em .49em;
+			color: #000000 !important;
 		}
 		.sign-and {
 			font-size: 1.2em;
@@ -626,7 +632,8 @@ CSS to be used on the form editor page
 		.and-or select {
 			font-size: 1.2em;
 			font-weight: 500;
-			opacity: .6;			
+			opacity: .8;
+			color: #000000 !important;
 		}
 		.remove-logic {
 			position: absolute;
@@ -635,10 +642,10 @@ CSS to be used on the form editor page
 			color: lighten(@red, 15%);
 			cursor: pointer;
 			font-size: 14px;
-			padding: .32em .3em .27em;			
+			padding: .32em .3em .27em;
 			&:hover {
 				color: lighten(@red, 0%);
-			}			
+			}
 		}
 		#add-logic-cover {
 			margin-bottom: 1.5em;
@@ -649,17 +656,17 @@ CSS to be used on the form editor page
 			}
 		}
 		.add-logic-button {
-	    color: darken(@borderColorDarkOne, 10%);
+	    color: var(--fc-color-text-muted);
 	    width: 92%;
 	    height: 71px;
 	    background: 0 0;
 	    text-transform: uppercase;
-	    border: 1px dashed darken(@borderColorDarkOne, 5%);
+	    border: 1px dashed var(--fc-color-border);
 	    box-shadow: none;
 	    cursor: pointer;
 	    &:hover {
-	    	color: darken(@borderColorDarkOne, 20%);
-	    	border: 1px dashed darken(@borderColorDarkOne, 15%);
+	    	color: var(--fc-color-text);
+	    	border: 1px dashed var(--fc-color-text-muted);
 	    }
 		}
 		#add-logic-heads {
@@ -696,7 +703,7 @@ CSS to be used on the form editor page
 			    left: 50%;
 			    bottom: -18%;
 			    color: @themeColor;
-			    font-weight: 300;				
+			    font-weight: 300;
 				}
 			}
 		}
@@ -730,6 +737,7 @@ CSS to be used on the form editor page
 				font-size: .9em;
 				text-align: center;
 				padding: .6em 0;
+				opacity: 1;
 				&.logic-text-if {
 					width: 3.5%;
 				}
@@ -772,9 +780,9 @@ CSS to be used on the form editor page
 		    text-transform: uppercase;
 		    font-weight: 600;
 		    font-size: .9em;
-		    opacity: .4;
+		    opacity: .8;
 		    padding: .75em 0;
-		    border: 1px dashed #555;
+		    border: 1px dashed var(--fc-color-text);
 		    .smoothing();
 		    &:hover {
 		    	opacity: .6;
@@ -789,19 +797,20 @@ CSS to be used on the form editor page
 				background-size: 4px;
 				border-radius: 0;
 				width: 100%;
-				background-color: transparent;
+				background-color: var(--fc-color-surface);
+				color: var(--fc-color-text);
 				margin: 0;
 				border: 0;
 				margin-bottom: 1px;
-				box-shadow: 0 0 0 .5px darken(@backgroundGreyTwo, 10%);
+				box-shadow: 0 0 0 .5px var(--fc-color-border);
 			}
 			.and-or {
 				width: 100%;
 			}
 			.group {
-				background-color: @backgroundGreyTwo;
+				background-color: var(--fc-color-surface-alt);
 				border-radius: 2px;
-				box-shadow: 0 0 0 1px darken(@backgroundGreyTwo, 20%);
+				box-shadow: 0 0 0 1px var(--fc-color-border);
 				.group-row:first-child .sign-and {
 					display: none;
 				}
@@ -819,12 +828,12 @@ CSS to be used on the form editor page
 				.selectize-control,
 				.trigger-intergration-select,
 				.set-value-field,
-				.trigger-intergration-select {				
+				.trigger-intergration-select {
 					display: none;
 				}
 				.result-type {
 					width: 49%;
-					border-left: 1px solid #d4d4d4;
+					border-left: 1px solid var(--fc-color-border);
 				}
 				.result-type- {
 					opacity: 0;
@@ -851,7 +860,7 @@ CSS to be used on the form editor page
 			.selectize-control {
 				position: relative;
 				width: 100%;
-				box-shadow: 0 0 0 .5px darken(@backgroundGreyTwo, 10%);
+				box-shadow: 0 0 0 .5px var(--fc-color-border);
 				input[type='text'] {
 					box-shadow: none;
 					width: 100% !important;
@@ -859,7 +868,7 @@ CSS to be used on the form editor page
 					transition: none;
 					margin-bottom: 0;
 					&:focus {
-						background-color: white;
+						background-color: var(--fc-color-surface);
 						box-shadow: @boxShadowDarkOne;
 					}
 				}
@@ -873,13 +882,13 @@ CSS to be used on the form editor page
 					background-color: darken(@backgroundGreyTwo, 10%);
 				}
 				.selectize-dropdown {
-					background-color: white;
+					background-color: var(--fc-color-surface);
 					box-shadow: @boxShadowDarkOne;
 					position: absolute;
-					z-index: 999;			
+					z-index: 999;
 					&:before {
 						content: '';
-						background-color: white;
+						background-color: var(--fc-color-surface);
 						position: absolute;
 						top: -6px;
 						left: 0;
@@ -889,7 +898,7 @@ CSS to be used on the form editor page
 					.selectize-dropdown-content {
 						width: 100%;
 						max-height: 400px;
-						overflow-y: auto;						
+						overflow-y: auto;
 					}
 					.option {
 						display: block;
@@ -905,8 +914,8 @@ CSS to be used on the form editor page
 		}
 	}
 	.option-box {
-		color: @fontColor;
-		background: white;
+		color: #000000 !important;
+		background: #ffffff !important;
 		display: none;
 		position: fixed;
 		left: 160px;
@@ -915,7 +924,6 @@ CSS to be used on the form editor page
 		max-width: 70em;
 		overflow-x: hidden;
 		box-shadow: @boxShadowPanels;
-		background-color: @backgroundGreyOne;
 		.trigger-help {
 			display: block;
 			cursor: pointer;
@@ -937,7 +945,7 @@ CSS to be used on the form editor page
 		.nav-tabs-slide {
 			display: block;
 			letter-spacing: -4px;
-			background-color: white;
+			background-color: #ffffff !important;
 			border-bottom: 1px solid @borderColorDarkOne;
 			.smoothing();
 			font-weight: 500;
@@ -951,18 +959,19 @@ CSS to be used on the form editor page
 				display: inline-block;
 				box-sizing: border-box;
 				cursor: pointer;
-				opacity: .5;
+				// Use solid color instead of opacity for accessible contrast
+				color: var(--fc-color-text-muted);
 				margin-bottom: -1px;
 				border-style: solid;
-				border-color: @borderColorDarkOne;
+				border-color: var(--fc-color-border);
 				border-width: 0;
 				.smoothing();
 				&:hover {
-					opacity: 1;
+					color: var(--fc-color-text);
 				}
 				&.active {
-					opacity: 1;
-					background-color: @backgroundGreyOne;
+					color: var(--fc-color-text);
+					background-color: var(--fc-color-surface-alt);
 					border-left-width: 1px;
 					border-right-width: 1px;
 				}
@@ -1038,7 +1047,7 @@ CSS to be used on the form editor page
 				bottom: -1px;
 				width: 3px;
 				background-color: @themeColor;
-			}			
+			}
 		}
 		.ac-toggle {
 			cursor: pointer;
@@ -1103,9 +1112,10 @@ CSS to be used on the form editor page
 			font-size: 1.15em;
 			padding: 1.15em 1.05em .95em;
 			.smoothing();
-			font-weight: 500;			
+			font-weight: 500;
 		}
 		.single-option {
+			color: #000000 !important;
 			position: relative;
 			user-select: none;
 			.has-border-top,
@@ -1178,7 +1188,7 @@ CSS to be used on the form editor page
 					display: none;
 				}
 				&.wp-picker-active {
-					background-color: white;
+					background-color: var(--fc-color-surface);
 					z-index: 99;
 				}
 			}
@@ -1214,7 +1224,7 @@ CSS to be used on the form editor page
 				    position: absolute;
 				    left: 50%;
 				    top: 50%;
-				    color: white;
+				    color: var(--fc-color-surface);
 					}
 				}
 				.wp-picker-container {
@@ -1248,7 +1258,7 @@ CSS to be used on the form editor page
 			.option-description {
 				color: inherit;
 				padding-left: 0px;
-			}			
+			}
 			.option-description {
 				display: block;
 				position: relative;
@@ -1303,10 +1313,10 @@ CSS to be used on the form editor page
 			    margin: 0;
 			    background-color: lighten(@green, 12%);
 		    	box-shadow: 0 0 0 1px lighten(@green, 7%);
-		    }		    
+		    }
 		    &:checked {
 			    border: 0;
-			    margin: 0;		    	
+			    margin: 0;
 		    	background-color: lighten(@green, 5%);
 		    	box-shadow: 0 0 0 1px darken(@green, 0%);
 		    }
@@ -1315,8 +1325,8 @@ CSS to be used on the form editor page
 					top: 24px;
 					height: 9px;
 					width: 17px;
-					border-left: 3px solid #fff;
-					border-bottom: 3px solid #fff;
+					border-left: 3px solid var(--fc-color-surface);
+					border-bottom: 3px solid var(--fc-color-surface);
 		    }
 		    &:focus {
 		    	outline: none;
@@ -1328,7 +1338,7 @@ CSS to be used on the form editor page
 				font-size: 13px;
 				padding: 10px 12px;
 				border: 1px solid #ddd;
-				background: white;
+				background: var(--fc-color-surface);
 				border-radius: 2px;
 				width: 100%;
 				margin-bottom: 5px;
@@ -1378,7 +1388,7 @@ CSS to be used on the form editor page
 				text-align: left;
 				font-size: 90%;
 				padding-top: 2em;
-				color: #777;
+				color: var(--fc-color-text-muted);
 			}
 		}
 		.custom-text-cover {
@@ -1395,7 +1405,7 @@ CSS to be used on the form editor page
 					color: @fontColor;
 				}
 				&:focus {
-					background-color: white;
+					background-color: var(--fc-color-surface);
 					box-shadow: 0 0 0 .5px rgba(0,20,40,.1), 0 0 12px rgba(0,0,0,.12);
 					color: @fontColor;
 				}
@@ -1477,11 +1487,11 @@ CSS to be used on the form editor page
 						width: 21.5%;
 						bottom: 9px;
 						height: 9px;
-						background: #ccc;
+						background: var(--fc-color-border);
 					}
 					> span:nth-child(3) {
-						background: white;
-						border: 2px solid #ccc;
+						background: var(--fc-color-surface);
+						border: 2px solid var(--fc-color-border);
 						height: 21px;
 						left: 31%;
 						bottom: 9px;
@@ -1498,8 +1508,8 @@ CSS to be used on the form editor page
 						background: #bbb;
 					}
 					> span:nth-child(2) {
-						background: white;
-						border: 2px solid #ccc;
+						background: var(--fc-color-surface);
+						border: 2px solid var(--fc-color-border);
 						height: 21px;
 						width: 86%;
 						left: 7%;
@@ -1519,11 +1529,11 @@ CSS to be used on the form editor page
 						width: 35px;
 						bottom: 37px;
 						height: 9px;
-						background: #ccc;
+						background: var(--fc-color-border);
 					}
 					> span:nth-child(3) {
-						background: white;
-						border: 2px solid #ccc;
+						background: var(--fc-color-surface);
+						border: 2px solid var(--fc-color-border);
 						height: 21px;
 						width: 86%;
 						left: 8px;
@@ -1540,14 +1550,14 @@ CSS to be used on the form editor page
 						background: #bbb;
 					}
 					> span:nth-child(2) {
-						border-bottom: 2px solid #ccc;
+						border-bottom: 2px solid var(--fc-color-border);
 						height: 21px;
 						width: 86%;
 						left: 7%;
 						bottom: 9px;
 						border-radius: 0;
 					}
-				}				
+				}
 			}
 			.field-alignment {
 				width: 75%;
@@ -1567,11 +1577,11 @@ CSS to be used on the form editor page
 						width: 35px;
 						bottom: 37px;
 						height: 9px;
-						background: #ccc;
+						background: var(--fc-color-border);
 					}
 					> span:nth-child(3) {
-						background: white;
-						border: 2px solid #ccc;
+						background: var(--fc-color-surface);
+						border: 2px solid var(--fc-color-border);
 						height: 21px;
 						width: 86%;
 						left: 8px;
@@ -1593,11 +1603,11 @@ CSS to be used on the form editor page
 						width: 35px;
 						bottom: 37px;
 						height: 9px;
-						background: #ccc;
+						background: var(--fc-color-border);
 					}
 					> span:nth-child(3) {
-						background: white;
-						border: 2px solid #ccc;
+						background: var(--fc-color-surface);
+						border: 2px solid var(--fc-color-border);
 						height: 21px;
 						width: 86%;
 						left: 8px;
@@ -1617,11 +1627,11 @@ CSS to be used on the form editor page
 						width: 35px;
 						bottom: 37px;
 						height: 9px;
-						background: #ccc;
+						background: var(--fc-color-border);
 					}
 					> span:nth-child(3) {
-						background: white;
-						border: 2px solid #ccc;
+						background: var(--fc-color-surface);
+						border: 2px solid var(--fc-color-border);
 						height: 21px;
 						width: 86%;
 						right: 8px;
@@ -1655,7 +1665,9 @@ CSS to be used on the form editor page
 			top: -1.5em;
 			text-align: center;
 			box-shadow: none;
-			border: 1px solid #bbb;
+			border: 1px solid var(--fc-color-border);
+			background-color: var(--fc-color-surface);
+			color: var(--fc-color-text);
 		}
 		span {
 			text-transform: uppercase;
@@ -1666,7 +1678,8 @@ CSS to be used on the form editor page
 			width: 7em;
 			margin-left: -3.5em;
 			top: -2.9em;
-			text-align: center;	
+			text-align: center;
+			color: var(--fc-color-text);
 		}
 	}
 
@@ -1678,7 +1691,7 @@ CSS to be used on the form editor page
 		width: 100%;
 		.fc-form.frame-hidden .form-page-content {
 			min-height: 3em;
-		}		
+		}
 		&.nos-10 {
 			.no-fields {
 				display: block;
@@ -1692,7 +1705,7 @@ CSS to be used on the form editor page
 				width: 420px;
 				left: 50%;
 				margin-left: -210px;
-				color: #999;
+				color: var(--fc-color-text-muted);
 			}
 			.fc-form {
 				min-height: 150px;
@@ -1745,7 +1758,7 @@ CSS to be used on the form editor page
 				position: absolute;
 				top: -.1em;
 				line-height: 2px;
-				background-color: white;
+				background-color: var(--fc-color-surface);
 				text-align: center;
 				left: 50%;
 				margin-left: -4.2em;
@@ -1756,7 +1769,7 @@ CSS to be used on the form editor page
 				top: -.56em;
 				right: 1em;
 				line-height: 1px;
-				background-color: white;
+				background-color: var(--fc-color-surface);
 				font-size: 1.4em;
 				color: @red;
 				cursor: pointer;
@@ -1801,7 +1814,7 @@ CSS to be used on the form editor page
 				}
 			}
 			.form-element-html {
-				cursor: pointer;				
+				cursor: pointer;
 				position: relative;
 				.tooltip {
 					display: none !important;
@@ -1826,14 +1839,14 @@ CSS to be used on the form editor page
 						animation: none;
 					}
 				}
-			}		
+			}
 			.form-options {
 				font-size: 13px;
 				text-align: left;
 				position: absolute;
 				display: none;
 				top: -6em;
-				background: white;
+				background: var(--fc-color-surface);
 				width: 30em;
 				border-radius: @borderRadius;
 				box-shadow: @boxShadowDarkOne;
@@ -1846,7 +1859,7 @@ CSS to be used on the form editor page
 					margin: 1em -.55em 2em -1em;
 				}
 				.options-head {
-					background-color: white;
+					background-color: var(--fc-color-surface);
 					padding: 1em .8em .9em 1em;
 					border-bottom: 1px solid @borderColor;
 					border-radius: @borderRadius @borderRadius 0 0;
@@ -1882,13 +1895,13 @@ CSS to be used on the form editor page
 						margin-top: -0.28em;
 						&:hover {
 							color: darken(@red, 8%);
-						}						
+						}
 					}
 					.duplicate {
 						color: @green;
 						&:hover {
 							color: darken(@green, 8%);
-						}						
+						}
 					}
 				}
 				.options-main {
@@ -1919,13 +1932,13 @@ CSS to be used on the form editor page
 						border-radius: 2px 2px 0 0;
 						z-index: 101;
 						border-color: transparent;
-						box-shadow: @boxShadowDarkOne;						
+						box-shadow: @boxShadowDarkOne;
 					}
 				}
 				.select-icon {
 					padding: .75em .9em .69em;
 					display: block;
-					background-color: white;
+					background-color: var(--fc-color-surface);
 					border: 1px solid #d6d8d9;
 					border-radius: 2px;
 					cursor: pointer;
@@ -1935,7 +1948,7 @@ CSS to be used on the form editor page
 					display: none;
 					position: absolute;
 					z-index: 102;
-					background-color: white;
+					background-color: var(--fc-color-surface);
 					width: 170px;
 					text-align: center;
 					border-radius: 0 2px 2px 2px;
@@ -2024,7 +2037,7 @@ CSS to be used on the form editor page
 				background-color: @backgroundGreyOne;
 				margin-top: -16px;
 				top: 8em;
-			}			
+			}
 			.form-options.state-true {
 				display: block;
 			}
@@ -2038,7 +2051,7 @@ CSS to be used on the form editor page
 				right: 100%;
 				margin-right: -10px;
 				transform: rotate(-45deg);
-			}			
+			}
 		}
 		.form-element:nth-child(even) {
 			.form-options {
@@ -2079,7 +2092,7 @@ CSS to be used on the form editor page
 			input[type='checkbox'],
 			input[type='radio'] {
 				position: absolute;
-				left: -999em;				
+				left: -999em;
 			}
 			&.formcraft-icon-type-::after {
 				position: absolute;
@@ -2174,14 +2187,14 @@ CSS to be used on the form editor page
 					display: block;
 					width: 200px;
 					margin-top: .5em;
-				} 
+				}
 			}
 			.hljs {
 				margin: .5em 0;
 				border-radius: 3px;
 				white-space: pre;
 				box-shadow: 0 0 3px rgba(0, 0, 0, 0.06);
-				border: 1px solid rgba(0,0,0,.1);				
+				border: 1px solid rgba(0,0,0,.1);
 			}
 			li img {
 				margin: .5em 0;
@@ -2243,4 +2256,29 @@ body.folded #formcraft-builder-cover .option-box {
   .update-nag {
     display: none !important;
   }
+}
+
+/* Drag and Drop Enchancements */
+.ui-sortable-helper {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+    opacity: 0.9 !important;
+    transform: scale(1.02) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    z-index: 9999 !important;
+    background-color: var(--fc-color-surface) !important;
+    border-radius: var(--fc-radius-md) !important;
+}
+
+.ui-sortable-placeholder {
+    visibility: visible !important;
+    background: repeating-linear-gradient(
+        45deg,
+        var(--fc-color-surface-alt),
+        var(--fc-color-surface-alt) 10px,
+        var(--fc-color-border) 10px,
+        var(--fc-color-border) 20px
+    ) !important;
+    border: 2px dashed var(--fc-color-primary) !important;
+    opacity: 0.5 !important;
+    border-radius: var(--fc-radius-md) !important;
 }

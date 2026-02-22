@@ -1314,7 +1314,8 @@ FormCraftApp.controller('FormController', function($scope, $locale, $http, $time
 				config: config
 			}
 		})
-			.success((response) => {
+			.then((res) => {
+				let response = res.data
 				if (response.failed) {
 					$scope.TestEmailResult = `<div class="IsRed">${response.failed}</div>`
 					$scope.TestEmailResultMore = `<br/><strong>${translate['Debug Info']}:</strong><br/>${response.debug}`
@@ -1334,7 +1335,8 @@ FormCraftApp.controller('FormController', function($scope, $locale, $http, $time
 				id: jQuery('#form_id').val(),
 				formcraft3_wpnonce: jQuery('#formcraft3_wpnonce').val()
 			}
-		}).success((response) => {
+		}).then((res) => {
+			let response = res.data
 			/* Fetch and Fix Addons */
 			response.addons = response.addons === false ? null : response.addons
 			if (response.addons === null || response.addons.trim() === '') {
@@ -1824,8 +1826,20 @@ FormCraftApp.controller('FormController', function($scope, $locale, $http, $time
 				}
 			})
 			$scope.$watch('Builder.Config.font_family', function(newValue) {
-				if (typeof $scope.Builder.Config.font_family !== 'undefined' && $scope.Builder.Config.font_family.indexOf('Arial') === -1 && $scope.Builder.Config.font_family.indexOf('Courier') === -1 && $scope.Builder.Config.font_family.indexOf('sans-serif') === -1 && $scope.Builder.Config.font_family.indexOf('inherit') === -1) {
-					jQuery('head').append(`<link href='${(location.protocol === 'http:' ? 'http:' : 'https:')}//fonts.googleapis.com/css?family=${($scope.Builder.Config.font_family.replace(/ /g, '+'))}:400,600,700' rel='stylesheet' type='text/css'>`)
+				const font = $scope.Builder.Config.font_family;
+				const isSystemFont = !font || font === 'inherit'
+					|| font.indexOf('Arial')       !== -1
+					|| font.indexOf('Courier')     !== -1
+					|| font.indexOf('sans-serif')  !== -1
+					|| font.indexOf('Georgia')     !== -1
+					|| font.indexOf('serif')       !== -1
+					|| font.indexOf('monospace')   !== -1
+					|| font.indexOf('-apple-system') !== -1
+					|| font.indexOf('BlinkMac')    !== -1;
+				if (!isSystemFont) {
+					const protocol = location.protocol === 'http:' ? 'http:' : 'https:';
+					const family   = encodeURIComponent(font) + ':ital,wght@0,400;0,600;0,700;1,400';
+					jQuery('head').append(`<link href='${protocol}//fonts.googleapis.com/css2?family=${family}&display=swap' rel='stylesheet' type='text/css'>`);
 				}
 			})
 			$scope.$watch('Color_scheme', function() {

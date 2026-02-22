@@ -67,7 +67,7 @@ class FormRenderer
       $dependencies[] = 'jquery-ui-mouse';
     }
     if ($load_fileupload===true) {
-      wp_enqueue_script('fileupload', plugins_url( 'assets/js/vendor/jquery.fileupload.js', __FILE__ ),array('jquery-ui-widget'));
+      wp_enqueue_script('fileupload', plugins_url( '../../assets/js/vendor/jquery.fileupload.js', __FILE__ ),array('jquery-ui-widget'));
       wp_localize_script( 'fileupload', 'FC_f',
         array(
           'ajaxurl' => admin_url( 'admin-ajax.php' )
@@ -75,14 +75,14 @@ class FormRenderer
         );
     }
     if ($load_address) {
-      wp_enqueue_script('typeahead', plugins_url( 'assets/js/vendor/typeahead.min.js', __FILE__ ), array('jquery'), $fc_meta['version']);
-      wp_enqueue_script('typeahead-address', plugins_url( 'assets/js/vendor/typeahead-addresspicker.min.js', __FILE__ ), array('jquery'), $fc_meta['version']);
+      wp_enqueue_script('typeahead', plugins_url( '../../assets/js/vendor/typeahead.min.js', __FILE__ ), array('jquery'), $fc_meta['version']);
+      wp_enqueue_script('typeahead-address', plugins_url( '../../assets/js/vendor/typeahead-addresspicker.min.js', __FILE__ ), array('jquery'), $fc_meta['version']);
       wp_enqueue_script('google-maps', 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places&key='.$load_address, array('jquery'));
     }
-    wp_enqueue_script('fc-modal', plugins_url( 'assets/js/src/fc_modal.js', __FILE__ ), array('jquery'), $fc_meta['version']);
-    wp_enqueue_script('tooltip', plugins_url( 'assets/js/vendor/tooltip.min.js', __FILE__ ), array('jquery', 'fc-modal'));
-    wp_enqueue_script('awesomplete', plugins_url('lib/awesomplete.min.js', __FILE__ ));
-    wp_enqueue_script('fc-form', plugins_url( 'dist/form.min.js', __FILE__ ), $dependencies, $fc_meta['version']);
+    wp_enqueue_script('fc-modal', plugins_url( '../../assets/js/src/fc_modal.js', __FILE__ ), array('jquery'), $fc_meta['version']);
+    wp_enqueue_script('tooltip', plugins_url( '../../assets/js/vendor/tooltip.min.js', __FILE__ ), array('jquery', 'fc-modal'));
+    wp_enqueue_script('awesomplete', plugins_url('../../lib/awesomplete.min.js', __FILE__ ));
+    wp_enqueue_script('fc-form', plugins_url( '../../dist/form.min.js', __FILE__ ), $dependencies, $fc_meta['version']);
 
     foreach ($dependencies as $key => $value) {
       wp_enqueue_script($value);
@@ -105,7 +105,7 @@ class FormRenderer
         array(
           'ajaxurl' => admin_url( 'admin-ajax.php' ),
           'fct' => $fc_translate,
-          'datepickerLang' => plugins_url( 'assets/js/datepicker-lang/', __FILE__ )
+          'datepickerLang' => plugins_url( '../../assets/js/datepicker-lang/', __FILE__ )
           )
         );
       global $footerVariables;
@@ -227,7 +227,7 @@ class FormRenderer
     $logicScript = "<script> window.formcraftLogic = window.formcraftLogic || {}; window.formcraftLogic[".$id."] = ".json_encode($meta['config']['Logic'])."; </script>";
 
     if ($type=='popup') {
-      wp_enqueue_script('fc-modal', plugins_url( 'assets/js/src/fc_modal.js', __FILE__ ), array(), $fc_meta['version']);
+      wp_enqueue_script('fc-modal', plugins_url( '../../assets/js/src/fc_modal.js', __FILE__ ), array(), $fc_meta['version']);
       if ( $placement=='left' || $placement=='right' )
       {
         $button = "<div class='formcraft-css body-append image_button_cover placement-$placement'><a data-toggle='fc_modal' data-target='#modal-$uniq' style='background-color: $button_color; color: $font_color' class='$class'>$content</a>";

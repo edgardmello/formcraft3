@@ -1,0 +1,21 @@
+{
+  "name": "edgardmello/formcraft3",
+  "description": "Premium WordPress form builder, refactored for PHP 8.2+",
+  "type": "wordpress-plugin",
+  "require": {
+    "php": ">=8.2.0"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.7",
+    "phpstan/phpstan": "^1.10"
+  },
+  "autoload": {
+    "psr-4": {
+      "FormCraft\\": "src/"
+    }
+  },
+  "scripts": {
+    "lint": "phpcs --standard=PSR12 src/",
+    "stan": "phpstan analyse src/ --level=5"
+  }
+}

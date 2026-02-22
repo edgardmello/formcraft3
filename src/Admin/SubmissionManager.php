@@ -25,7 +25,7 @@ class SubmissionManager
     if ( !current_user_can($fc_meta['user_can']) ) {
       die();
     }
-    $nonce = $_REQUEST['formcraft3_wpnonce'];    
+    $nonce = $_REQUEST['formcraft3_wpnonce'];
     if (!wp_verify_nonce($nonce, 'formcraft3_wpnonce')) {
       exit;
     }
@@ -51,7 +51,9 @@ class SubmissionManager
       echo json_encode(array('failed'=>esc_html__('Failed deleting submissions','formcraft') ));
       die();
     }
-  }\n\n    public function handleGetEntries() {
+  }
+
+  public function handleGetEntries() {
     global $fc_meta, $fc_submissions_table, $wpdb;
     if (!current_user_can($fc_meta['user_can'])) {
       die();
@@ -59,7 +61,7 @@ class SubmissionManager
     $nonce = $_REQUEST['formcraft3_wpnonce'];
     if (!wp_verify_nonce( $nonce, 'formcraft3_wpnonce')) {
       exit;
-    }    
+    }
     $page = isset($_GET['page']) && ctype_digit($_GET['page']) ? $_GET['page']-1 : 0;
     $whichForm = isset($_GET['whichForm']) && ctype_digit($_GET['whichForm']) ? $_GET['whichForm'] : 0;
     $per_page = isset($_GET['perPage']) && ctype_digit($_GET['perPage']) ? $_GET['perPage'] : 10;
@@ -95,7 +97,9 @@ class SubmissionManager
       echo json_encode(array('pages'=>'0','total'=>'0'));
       die();
     }
-  }\n\n    public function handleGetEntryContent() {
+  }
+
+  public function handleGetEntryContent() {
     global $fc_meta, $fc_submissions_table, $wpdb;
     if (!current_user_can($fc_meta['user_can'])) {
       die();
@@ -103,7 +107,7 @@ class SubmissionManager
     $nonce = $_REQUEST['formcraft3_wpnonce'];
     if (!wp_verify_nonce( $nonce, 'formcraft3_wpnonce')) {
       exit;
-    }    
+    }
     if ( !isset($_GET['entryID']) || !ctype_digit($_GET['entryID']) ) {
       die();
     }
@@ -122,12 +126,14 @@ class SubmissionManager
     }
     echo json_encode($submission);
     die();
-  }\n\n    public function handleUpdateEntryContent() {
+  }
+
+  public function handleUpdateEntryContent() {
     global $fc_meta, $fc_submissions_table, $wpdb;
     if (!current_user_can($fc_meta['user_can'])) {
       die();
     }
-    $nonce = $_REQUEST['formcraft3_wpnonce'];    
+    $nonce = $_REQUEST['formcraft3_wpnonce'];
     if (!wp_verify_nonce( $nonce, 'formcraft3_wpnonce')) {
       exit;
     }

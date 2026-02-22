@@ -24,14 +24,14 @@ class FormManager
     global $wpdb, $fc_meta, $fc_forms_table;
 
     require_once(ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php');
-    require_once(ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php'); 
+    require_once(ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php');
     // Set the permission constants if not already set.
     if ( ! defined( 'FS_CHMOD_DIR' ) ) {
         define( 'FS_CHMOD_DIR', ( fileperms( ABSPATH ) & 0777 | 0755 ) );
     }
     if ( ! defined( 'FS_CHMOD_FILE' ) ) {
         define( 'FS_CHMOD_FILE', ( fileperms( ABSPATH . 'index.php' ) & 0777 | 0644 ) );
-    }     
+    }
 
     if ( !current_user_can($fc_meta['user_can']) ) {
       die();
@@ -50,7 +50,7 @@ class FormManager
       $formData['addons'] = NULL;
       $formData['meta_builder'] = NULL;
       break;
-      
+
       case 'template':
       if (empty($_POST['templatePath'])) {
         echo json_encode(array('failed' => esc_html__('Please upload a template file.', 'formcraft')));
@@ -70,7 +70,7 @@ class FormManager
       $formData['meta_builder'] = $importForm['meta_builder'];
       $formData['old_url'] = $importForm['old_url'];
       break;
-      
+
       case 'duplicate':
       if (empty($_POST['duplicateFormID']) || !ctype_digit($_POST['duplicateFormID'])) {
         echo json_encode(array('failed' => esc_html__('Select a form to duplicate.', 'formcraft')));
@@ -85,7 +85,7 @@ class FormManager
       $formData['addons'] = json_encode(json_decode(wp_unslash($existing_form['addons'])));
       $formData['meta_builder'] = $existing_form['meta_builder'];
       break;
-      
+
       case 'import':
       if (empty($_FILES['file'])) {
         echo json_encode(array('failed' => esc_html__('Please upload a template file.', 'formcraft')));
@@ -128,7 +128,9 @@ class FormManager
     do_action('formcraft_after_form_add', array('id'=>$wpdb->insert_id, 'type'=>$_POST['type'], 'name'=>$form_name));
     $response = array('success'=> esc_html__('Form created. Redirecting.', 'formcraft'), 'redirect'=> '&id='.$wpdb->insert_id);
     echo json_encode($response); die();
-  }\n\n    public function handleDeleteForm() {
+  }
+
+  public function handleDeleteForm() {
     global $fc_meta, $fc_forms_table, $wpdb;
     if (!current_user_can($fc_meta['user_can'])) {
       die();
@@ -136,7 +138,7 @@ class FormManager
     $nonce = $_REQUEST['formcraft3_wpnonce'];
     if (!wp_verify_nonce( $nonce, 'formcraft3_wpnonce')) {
       exit;
-    }    
+    }
     $form = $_GET['form'];
     if (!ctype_digit($form)) {
       die();
@@ -152,7 +154,9 @@ class FormManager
       echo json_encode(array('failed'=>esc_html__('Failed deleting form','formcraft') ));
       die();
     }
-  }\n\n    public function handleGetForms() {
+  }
+
+  public function handleGetForms() {
     global $fc_meta, $fc_forms_table, $wpdb;
 
     if (!current_user_can($fc_meta['user_can'])) {
@@ -201,7 +205,9 @@ class FormManager
       echo json_encode(array('pages'=>'0','total'=>'0'));
       die();
     }
-  }\n\n    public function handleLoadFormData() {
+  }
+
+  public function handleLoadFormData() {
     global $wpdb, $fc_forms_table, $fc_meta;
     if ( !current_user_can($fc_meta['user_can']) ) {
       die();
@@ -209,7 +215,7 @@ class FormManager
     $nonce = $_REQUEST['formcraft3_wpnonce'];
     if (!wp_verify_nonce($nonce, 'formcraft3_wpnonce')) {
       exit;
-    }     
+    }
     $form_id = $_GET['id'];
     if (!ctype_digit($form_id)) {
       echo json_encode(array('failed'=>esc_html__('Invalid Form ID')));
@@ -237,7 +243,9 @@ class FormManager
       echo json_encode($formData);
     }
     die();
-  }\n\n    public function handleFormSave() {
+  }
+
+  public function handleFormSave() {
     global $wpdb, $fc_meta, $fc_forms_table;
     if (!current_user_can($fc_meta['user_can'])) {
       die();

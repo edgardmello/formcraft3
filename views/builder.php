@@ -10,20 +10,28 @@ $query = $wpdb->prepare("SELECT counter FROM $fc_forms_table WHERE id = %d", $fo
 $counter = $wpdb->get_var($query);
 
 $color_scheme = array(
-	'4488ee',
-	'4682B4',
-	'a9a9a9',
-	'e9967a',
-	'3cb371',
-	'8FBC8F',
-	'F08080',
-	'778899',
-	'FF6347',
-	'5F9EA0',
-	'deb887',
-	'ff69b4',
-	'cd5c5c',
-	'637bb3'
+	// Modern Blues
+	'2563d4',
+	'0ea5e9',
+	'6366f1',
+	'8b5cf6',
+	// Vibrant Accents
+	'ec4899',
+	'f97316',
+	'eab308',
+	'10b981',
+	// Neutral Slates
+	'334155',
+	'475569',
+	'64748b',
+	'94a3b8',
+	// Editorial
+	'1d4ed8',
+	'7c3aed',
+	'be185d',
+	'065f46',
+	'9f1239',
+	'92400e'
 );
 
 if (is_rtl()) {
@@ -158,7 +166,7 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 							<div ng-repeat='result in Builder.Config.Logic[$index][1] track by $index' class='group-row'>
 								<div class='width-100 sign-and'>
 									&
-								</div>								
+								</div>
 								<div class='width-43 set-value-{{result[0]}}'>
 									<select ng-model='result[0]'>
 										<option value=''><?php esc_html_e('(action)','formcraft'); ?></option>
@@ -410,7 +418,7 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 						<div>
 							<label>
 								<?php esc_html_e('Send Email(s) To','formcraft'); ?>
-								<i data-placement='top' data-html='true' class='formcraft-icon tooltip-icon float-right' data-toggle='tooltip' title='<?php esc_attr_e('When the form is submitted, an email will be sent to these addresses.<br>You can add multiple emails, separated by a comma.','formcraft'); ?>'>info_outline</i>								
+								<i data-placement='top' data-html='true' class='formcraft-icon tooltip-icon float-right' data-toggle='tooltip' title='<?php esc_attr_e('When the form is submitted, an email will be sent to these addresses.<br>You can add multiple emails, separated by a comma.','formcraft'); ?>'>info_outline</i>
 								<input type="text" placeholder="dan@example.com, joe@example.com" ng-model='Builder.Config.notifications.recipients'>
 							</label>
 						</div>
@@ -490,7 +498,7 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 								<i class='formcraft-icon' ng-click='removeAutoresponderFile($index)'>delete</i>
 							</div>
 							<button class='formcraft-button' ng-click='addAutoresponderFile()'><?php esc_html_e('Attach Files','formcraft'); ?></button>
-						</div>						
+						</div>
 					</div>
 				</div>
 				<div>
@@ -510,7 +518,7 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 					<div class='ac-inner'>
 						<span><?php esc_html_e('Add this shortcode to your page / post','formcraft'); ?>.
 							<textarea onclick='select()' rows='1' class='copy-code' readonly>[fc id='<?php echo $form_id; ?>'][/fc]</textarea>
-							<a data-post-id='179' class='trigger-help'><?php esc_html_e('Read more','formcraft'); ?></a>							
+							<a data-post-id='179' class='trigger-help'><?php esc_html_e('Read more','formcraft'); ?></a>
 						</span>
 					</div>
 
@@ -585,7 +593,7 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 					<label class='single-option has-checkbox'>
 						<input update-label type='checkbox' value='true' ng-model='Builder.Config.no_message_redirect'>
 						<h3><?php esc_html_e('Don\'t show success message if redirect is enabled','formcraft'); ?></h3>
-					</label>						
+					</label>
 					<label class='single-option has-checkbox'>
 						<input update-label type='checkbox' value='true' ng-model='Builder.Config.dont_submit_hidden'>
 						<h3><?php esc_html_e('Don\'t submit values for hidden fields','formcraft'); ?></h3>
@@ -646,7 +654,7 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 					<div class='ac-toggle'>
 						<?php esc_html_e('General Styling','formcraft'); ?>
 						<i class='formcraft-icon icon-type-down'>keyboard_arrow_down</i>
-						<i class='formcraft-icon icon-type-up'>keyboard_arrow_up</i>						
+						<i class='formcraft-icon icon-type-up'>keyboard_arrow_up</i>
 					</div>
 					<div class='ac-inner'>
 						<label class='single-option has-checkbox'>
@@ -656,7 +664,7 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 						<label class='single-option has-checkbox'>
 							<input update-label type='checkbox' ng-model='Builder.form_field_border' ng-true-value='"hidden"' ng-false-value='"visible"'>
 							<h3><?php esc_html_e('Remove Field Borders','formcraft'); ?></h3>
-						</label>						
+						</label>
 						<label class='single-option has-checkbox'>
 							<input update-label type='checkbox' ng-model='Builder.form_asterisk'>
 							<h3>
@@ -667,48 +675,115 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 							<input update-label type='checkbox' ng-model='Builder.hide_icons'>
 							<h3><?php esc_html_e('Hide Field Icons','formcraft'); ?></h3>
 						</label>
+						<label class='single-option has-checkbox'>
+							<input update-label type='checkbox' ng-model='Builder.Config.uppercase_labels'>
+							<h3><?php esc_html_e('Uppercase Labels','formcraft'); ?></h3>
+						</label>
+						<label class='single-option has-checkbox'>
+							<input update-label type='checkbox' ng-model='Builder.Config.field_shadow'>
+							<h3><?php esc_html_e('Show Field Shadow','formcraft'); ?></h3>
+						</label>
+						<div class='single-option'>
+							<h3><?php esc_html_e('Form Padding','formcraft'); ?></h3>
+							<div class='button-checkbox-group type-text'>
+								<label ng-class='{active: Builder.Config.form_padding=="compact"}'>
+									<input type='radio' name='form_padding' value='compact' ng-model='Builder.Config.form_padding'>
+									<?php esc_html_e('Compact','formcraft'); ?>
+								</label>
+								<label ng-class='{active: Builder.Config.form_padding=="normal"}'>
+									<input type='radio' name='form_padding' value='normal' ng-model='Builder.Config.form_padding'>
+									<?php esc_html_e('Normal','formcraft'); ?>
+								</label>
+								<label ng-class='{active: Builder.Config.form_padding=="spacious"}'>
+									<input type='radio' name='form_padding' value='spacious' ng-model='Builder.Config.form_padding'>
+									<?php esc_html_e('Spacious','formcraft'); ?>
+								</label>
+							</div>
+						</div>
 					</div>
 					<div class='ac-toggle'>
 						<?php esc_html_e('Font Styling','formcraft'); ?>
 						<i class='formcraft-icon icon-type-down'>keyboard_arrow_down</i>
-						<i class='formcraft-icon icon-type-up'>keyboard_arrow_up</i>						
+						<i class='formcraft-icon icon-type-up'>keyboard_arrow_up</i>
 					</div>
 					<div class='ac-inner'>
 						<div class='single-option'>
 							<select class='standalone' ng-model='Builder.Config.font_family'>
-								<option value="inherit"><?php esc_html_e('Default Font', 'formcraft'); ?></option>
-								<optgroup label='<?php esc_html_e('General Fonts','formcraft'); ?>'>
+								<option value="inherit"><?php esc_html_e('Default (Theme Font)', 'formcraft'); ?></option>
+								<optgroup label='<?php esc_html_e('System Fonts','formcraft'); ?>'>
+									<option value="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">System UI</option>
 									<option value="Helvetica, Arial, sans-serif">Helvetica / Arial</option>
-									<option value="'Trebuchet MS', Helvetica, Arial, sans-serif">Trebuchet MS</option>
-									<option value="'Courier New', Courier, monospace">Courier New</option>
-									<option value="'Georgia', sans-serif">Georgia</option>
-									<option value="'Times New Roman', sans-serif">Times New Roman</option>
+									<option value="'Georgia', serif">Georgia</option>
+									<option value="'Courier New', monospace">Courier New</option>
 								</optgroup>
-								<optgroup label='<?php esc_html_e('Google Fonts','formcraft'); ?>'>
-									<option value="Source Sans Pro">Source Sans Pro</option>
-									<option value="Ubuntu">Ubuntu</option>
-									<option value="Merriweather">Merriweather</option>
+								<optgroup label='<?php esc_html_e('Google — Sans-Serif','formcraft'); ?>'>
+									<option value="Inter">Inter</option>
+									<option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
+									<option value="DM Sans">DM Sans</option>
+									<option value="Outfit">Outfit</option>
+									<option value="Nunito">Nunito</option>
+									<option value="Figtree">Figtree</option>
+									<option value="Sora">Sora</option>
+									<option value="Rubik">Rubik</option>
+									<option value="Manrope">Manrope</option>
+									<option value="Poppins">Poppins</option>
+									<option value="Mulish">Mulish</option>
 									<option value="Roboto">Roboto</option>
-									<option value="Raleway">Raleway</option>
 									<option value="Lato">Lato</option>
-									<option value="Oswald">Oswald</option>
+									<option value="Open Sans">Open Sans</option>
+									<option value="Source Sans 3">Source Sans 3</option>
+									<option value="Ubuntu">Ubuntu</option>
+									<option value="Raleway">Raleway</option>
+								</optgroup>
+								<optgroup label='<?php esc_html_e('Google — Serif','formcraft'); ?>'>
 									<option value="Lora">Lora</option>
-									<option value="Bitter">Bitter</option>
-									<option value="Cabin">Cabin</option>
+									<option value="Merriweather">Merriweather</option>
 									<option value="Playfair Display">Playfair Display</option>
-									<option value="Courgette">Courgette</option>
+									<option value="DM Serif Display">DM Serif Display</option>
+									<option value="Cormorant Garamond">Cormorant Garamond</option>
+									<option value="Bitter">Bitter</option>
+								</optgroup>
+								<optgroup label='<?php esc_html_e('Google — Display / Handwriting','formcraft'); ?>'>
+									<option value="Oswald">Oswald</option>
+									<option value="Bebas Neue">Bebas Neue</option>
+									<option value="Pacifico">Pacifico</option>
+								</optgroup>
+								<optgroup label='<?php esc_html_e('Google — Monospace','formcraft'); ?>'>
+									<option value="JetBrains Mono">JetBrains Mono</option>
+									<option value="Fira Code">Fira Code</option>
 								</optgroup>
 							</select>
-							<div class='button-checkbox-group type-text'>
-								<label ng-click='Builder.font_size = Builder.font_size + 5'><?php esc_html_e('Font Size', 'formcraft'); ?> +</label>
-								<label ng-click='Builder.font_size = Builder.font_size - 5'><?php esc_html_e('Font Size', 'formcraft'); ?> -</label>
+							<div class='single-option'>
+								<h3><?php esc_html_e('Font Size','formcraft'); ?></h3>
+								<div class='button-checkbox-group type-text'>
+									<label ng-class='{active: Builder.Config.font_size_preset=="xs"}'>
+										<input type='radio' name='font_size_preset' value='xs' ng-model='Builder.Config.font_size_preset'>
+										<?php esc_html_e('XS','formcraft'); ?>
+									</label>
+									<label ng-class='{active: Builder.Config.font_size_preset=="sm"}'>
+										<input type='radio' name='font_size_preset' value='sm' ng-model='Builder.Config.font_size_preset'>
+										<?php esc_html_e('SM','formcraft'); ?>
+									</label>
+									<label ng-class='{active: Builder.Config.font_size_preset=="md"}'>
+										<input type='radio' name='font_size_preset' value='md' ng-model='Builder.Config.font_size_preset'>
+										<?php esc_html_e('MD','formcraft'); ?>
+									</label>
+									<label ng-class='{active: Builder.Config.font_size_preset=="lg"}'>
+										<input type='radio' name='font_size_preset' value='lg' ng-model='Builder.Config.font_size_preset'>
+										<?php esc_html_e('LG','formcraft'); ?>
+									</label>
+									<label ng-class='{active: Builder.Config.font_size_preset=="xl"}'>
+										<input type='radio' name='font_size_preset' value='xl' ng-model='Builder.Config.font_size_preset'>
+										<?php esc_html_e('XL','formcraft'); ?>
+									</label>
+								</div>
 							</div>
 						</div>
 					</div>
 					<div class='ac-toggle'>
 						<?php esc_html_e('Field Styling','formcraft'); ?>
 						<i class='formcraft-icon icon-type-down'>keyboard_arrow_down</i>
-						<i class='formcraft-icon icon-type-up'>keyboard_arrow_up</i>						
+						<i class='formcraft-icon icon-type-up'>keyboard_arrow_up</i>
 					</div>
 					<div class='ac-inner'>
 						<div class='single-option'>
@@ -759,13 +834,51 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 									<span class='change-border'></span>
 									<input type='radio' fc-placeholder-update name='fs_label' update-label value='right' ng-model='Builder.form_internal_alignment'>
 								</label>
-							</div>							
-						</div>				
+							</div>
+						</div>
+						<div class='single-option'>
+							<h3><?php esc_html_e('Field Border Radius', 'formcraft'); ?></h3>
+							<div class='button-checkbox-group type-text'>
+								<label>
+									<input type='radio' name='field_radius' value='sharp' ng-model='Builder.Config.field_radius'>
+									<?php esc_html_e('Sharp','formcraft'); ?>
+								</label>
+								<label>
+									<input type='radio' name='field_radius' value='soft' ng-model='Builder.Config.field_radius'>
+									<?php esc_html_e('Soft','formcraft'); ?>
+								</label>
+								<label>
+									<input type='radio' name='field_radius' value='rounded' ng-model='Builder.Config.field_radius'>
+									<?php esc_html_e('Rounded','formcraft'); ?>
+								</label>
+								<label>
+									<input type='radio' name='field_radius' value='pill' ng-model='Builder.Config.field_radius'>
+									<?php esc_html_e('Pill','formcraft'); ?>
+								</label>
+							</div>
+						</div>
+						<div class='single-option'>
+							<h3><?php esc_html_e('Field Border Width', 'formcraft'); ?></h3>
+							<div class='button-checkbox-group type-text'>
+								<label>
+									<input type='radio' name='field_border_width' value='thin' ng-model='Builder.Config.field_border_width'>
+									<?php esc_html_e('Thin','formcraft'); ?>
+								</label>
+								<label>
+									<input type='radio' name='field_border_width' value='medium' ng-model='Builder.Config.field_border_width'>
+									<?php esc_html_e('Medium','formcraft'); ?>
+								</label>
+								<label>
+									<input type='radio' name='field_border_width' value='thick' ng-model='Builder.Config.field_border_width'>
+									<?php esc_html_e('Thick','formcraft'); ?>
+								</label>
+							</div>
+						</div>
 					</div>
 					<div class='ac-toggle'>
 						<?php esc_html_e('Your Logo','formcraft'); ?>
 						<i class='formcraft-icon icon-type-down'>keyboard_arrow_down</i>
-						<i class='formcraft-icon icon-type-up'>keyboard_arrow_up</i>						
+						<i class='formcraft-icon icon-type-up'>keyboard_arrow_up</i>
 					</div>
 					<div class='ac-inner'>
 						<div class='single-option'>
@@ -775,7 +888,7 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 					<div class='ac-toggle'>
 						<?php esc_html_e('Custom CSS','formcraft'); ?>
 						<i class='formcraft-icon icon-type-down'>keyboard_arrow_down</i>
-						<i class='formcraft-icon icon-type-up'>keyboard_arrow_up</i>						
+						<i class='formcraft-icon icon-type-up'>keyboard_arrow_up</i>
 					</div>
 					<div class='ac-inner'>
 						<div class='single-option'>
@@ -796,7 +909,7 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 								?>
 							<label style='background: #<?php echo $value; ?>; border-color: <?php echo formcraft3_brightness('#'.$value, -30); ?>'>
 								<input type='radio' update-label value='#<?php echo $value; ?>' ng-model='Color_scheme' name='radio_cs'>
-							</label>								
+							</label>
 								<?php
 							}
 							?>
@@ -807,13 +920,13 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 							<?php esc_html_e('Or Build A Custom One','formcraft'); ?>
 						</div>
 						<div class='single-option has-checkbox has-border-top'>
-							<input type="text" value="#fff" angular-color class="color-picker" ng-model='Builder.Config.color_scheme_button'>							
+							<input type="text" value="#fff" angular-color class="color-picker" ng-model='Builder.Config.color_scheme_button'>
 							<h3>
 								<?php esc_html_e('Base Color','formcraft'); ?>
 							</h3>
 						</div>
 						<div class='single-option has-checkbox'>
-							<input type="text" value="#fff" angular-color class="color-picker" ng-model='Builder.Config.color_scheme_font'>							
+							<input type="text" value="#fff" angular-color class="color-picker" ng-model='Builder.Config.color_scheme_font'>
 							<h3>
 								<?php esc_html_e('Button Font Color','formcraft'); ?>
 							</h3>
@@ -931,7 +1044,7 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 
 			<button data-target='#help_modal' data-toggle='fc_modal' type='submit' id='help_button'>
 				<i class='formcraft-icon'>help_outline</i><?php esc_html_e('Help','formcraft') ?>
-			</button>		
+			</button>
 
 		</div>
 
@@ -1043,7 +1156,7 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?> .form-element .field-cover input[type="radio"]:checked,
 			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?> .form-element .field-cover input[type="checkbox"]:checked {
 				border-color: {{Builder.Config.color_scheme_button_dark}};
-				background: {{Builder.Config.color_scheme_button}};				
+				background: {{Builder.Config.color_scheme_button}};
 			}
 			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?> .form-element .star-cover label .star
 			{
@@ -1073,6 +1186,68 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 			{
 				font-family: {{Builder.Config.font_family}};
 			}
+
+			/* ── Font Size Presets (fluid clamp) ── */
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-fontsize-xs  { font-size: clamp(11px, 1.2vw, 13px) !important; }
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-fontsize-sm  { font-size: clamp(12px, 1.4vw, 14px) !important; }
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-fontsize-md  { font-size: clamp(14px, 1.6vw, 16px) !important; }
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-fontsize-lg  { font-size: clamp(16px, 1.9vw, 18px) !important; }
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-fontsize-xl  { font-size: clamp(18px, 2.2vw, 22px) !important; }
+
+			/* ── Field Border Radius ── */
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-radius-sharp  .field-cover input,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-radius-sharp  .field-cover textarea,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-radius-sharp  .field-cover select  { border-radius: 0 !important; }
+
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-radius-soft   .field-cover input,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-radius-soft   .field-cover textarea,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-radius-soft   .field-cover select  { border-radius: 4px !important; }
+
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-radius-rounded .field-cover input,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-radius-rounded .field-cover textarea,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-radius-rounded .field-cover select { border-radius: 10px !important; }
+
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-radius-pill    .field-cover input,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-radius-pill    .field-cover select  { border-radius: 99px !important; }
+
+			/* ── Field Border Width ── */
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-border-thin   .field-cover input,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-border-thin   .field-cover textarea,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-border-thin   .field-cover select  { border-width: 1px !important; }
+
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-border-medium .field-cover input,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-border-medium .field-cover textarea,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-border-medium .field-cover select  { border-width: 2px !important; }
+
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-border-thick  .field-cover input,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-border-thick  .field-cover textarea,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-border-thick  .field-cover select  { border-width: 3px !important; }
+
+			/* ── Form Padding ── */
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-padding-compact  .form-element-html,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-padding-compact  .form-element-html-builder { padding: 0.4em 0.6em !important; }
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-padding-normal   .form-element-html,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-padding-normal   .form-element-html-builder { padding: 0.9em 1.25em !important; }
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-padding-spacious .form-element-html,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-padding-spacious .form-element-html-builder { padding: 1.8em 2.4em !important; }
+
+			/* ── Uppercase Labels ── */
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-uppercase-labels .main-label,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-uppercase-labels .sub-label
+			{
+				text-transform: uppercase;
+				letter-spacing: .04em;
+				font-size: .8em;
+			}
+
+			/* ── Field Shadow ── */
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-field-shadow .field-cover input,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-field-shadow .field-cover textarea,
+			.formcraft-css .fc-form.fc-form-<?php echo $form_id; ?>.fc-field-shadow .field-cover select
+			{
+				box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.04) !important;
+			}
+
 			@media (max-width : 480px) {
 				html .dedicated-page,
 				html .dedicated-page .formcraft-css .fc-pagination > div.active
@@ -1082,7 +1257,7 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 			}
 		</style>
 		<div class='form-cover'>
-			<form ng-init='builderInit()' data-auto-scroll='{{Builder.Config.disable_auto_scroll}}' data-no-message-redirect='{{Builder.Config.no_message_redirect}}' data-thousand='{{Builder.Config.thousand_separator}}' data-decimal='{{Builder.Config.decimal_separator}}' data-delay='{{Builder.Config.Redirect_delay_seconds}}' data-id='<?php echo $form_id; ?>' class='fc-form fc-form-<?php echo $form_id; ?> label-{{Builder.label_style}} align-{{Builder.form_align}} fc-temp-class field-border-{{Builder.form_field_border}} frame-{{Builder.form_frame}} save-form-{{Builder.Config.save_progress}} dont-submit-hidden-{{Builder.Config.dont_submit_hidden}} remove-asterisk-{{Builder.form_asterisk}} icons-hide-{{Builder.hide_icons}} field-alignment-{{Builder.form_internal_alignment}} disable-enter-{{Builder.Config.disable_enter}}' style='width: {{Builder.form_width}}; color: {{Builder.Config.font_color}}; font-size: {{Builder.font_size}}%; background: {{Builder.form_background}}'>
+			<form ng-init='builderInit()' data-auto-scroll='{{Builder.Config.disable_auto_scroll}}' data-no-message-redirect='{{Builder.Config.no_message_redirect}}' data-thousand='{{Builder.Config.thousand_separator}}' data-decimal='{{Builder.Config.decimal_separator}}' data-delay='{{Builder.Config.Redirect_delay_seconds}}' data-id='<?php echo $form_id; ?>' class='fc-form fc-form-<?php echo $form_id; ?> label-{{Builder.label_style}} align-{{Builder.form_align}} fc-temp-class field-border-{{Builder.form_field_border}} frame-{{Builder.form_frame}} save-form-{{Builder.Config.save_progress}} dont-submit-hidden-{{Builder.Config.dont_submit_hidden}} remove-asterisk-{{Builder.form_asterisk}} icons-hide-{{Builder.hide_icons}} field-alignment-{{Builder.form_internal_alignment}} disable-enter-{{Builder.Config.disable_enter}}' ng-class="{'fc-fontsize-xs': Builder.Config.font_size_preset=='xs', 'fc-fontsize-sm': Builder.Config.font_size_preset=='sm', 'fc-fontsize-md': Builder.Config.font_size_preset=='md', 'fc-fontsize-lg': Builder.Config.font_size_preset=='lg', 'fc-fontsize-xl': Builder.Config.font_size_preset=='xl', 'fc-radius-sharp': Builder.Config.field_radius=='sharp', 'fc-radius-soft': Builder.Config.field_radius=='soft', 'fc-radius-rounded': Builder.Config.field_radius=='rounded', 'fc-radius-pill': Builder.Config.field_radius=='pill', 'fc-border-thin': Builder.Config.field_border_width=='thin', 'fc-border-medium': Builder.Config.field_border_width=='medium', 'fc-border-thick': Builder.Config.field_border_width=='thick', 'fc-padding-compact': Builder.Config.form_padding=='compact', 'fc-padding-normal': Builder.Config.form_padding=='normal', 'fc-padding-spacious': Builder.Config.form_padding=='spacious', 'fc-uppercase-labels': Builder.Config.uppercase_labels, 'fc-field-shadow': Builder.Config.field_shadow}" style='width: {{Builder.form_width}}; color: {{Builder.Config.font_color}}; font-size: {{Builder.font_size}}%; background: {{Builder.form_background}}'>
 				<div class='form-page form-page-{{$index}}' ng-repeat='page in Builder.FormElements track by $index' data-index='{{$index}}'>
 					<!--RFH-->
 					<div class='delete-page' ng-click='removeFormPage($index)' title='<?php esc_attr_e('Delete Page','formcraft'); ?>'>
@@ -1099,7 +1274,7 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 									<div title='<?php esc_attr_e('Field ID','formcraft'); ?>' class='field-id'>{{element.identifier}}</div>
 									<i title='<?php esc_attr_e('Delete Field','formcraft'); ?>' ng-click='removeFormElement($parent.$index, $index)' class='delete formcraft-icon'>add_circle</i>
 									<i title='<?php esc_attr_e('Duplicate Field','formcraft'); ?>' ng-click='duplicateFormElement($parent.$index, $index)' class='duplicate formcraft-icon'>add_circle</i>
-									<i title='<?php esc_attr_e('Minimize Options','formcraft'); ?>' ng-click='toggleOptions($event, $parent.$index, $index)' class='minimize formcraft-icon'>remove_circle</i>									
+									<i title='<?php esc_attr_e('Minimize Options','formcraft'); ?>' ng-click='toggleOptions($event, $parent.$index, $index)' class='minimize formcraft-icon'>remove_circle</i>
 								</div>
 								<div class='options-main' compile='element.elementOptions'></div>
 							</div>
@@ -1143,7 +1318,7 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 			<div class='fc_modal-body'>
 				<label class='icon-parent-label formcraft-icon-type-{{icon.Value}}' ng-repeat='icon in listIcons track by $index'>
 					<input ng-click='selectIcon(icon.Value)' type='radio' name='{{element.identifier}}_icon' update-label ng-model='element.elementDefaults.selectedIcon' value='{{::icon.Value}}'/><i class='formcraft-icon'>{{::icon.Value}}</i>
-				</label>				
+				</label>
 			</div>
 		</div>
 	</div>

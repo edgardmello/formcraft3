@@ -24,13 +24,15 @@ class AddonRegistry
     global $fc_addons, $fc_templates, $fc_triggers;
     $plugin_id = $plugin_id==0 ? false : $plugin_id;
     $controller = $controller==false ? '' : $controller;
-    $logo = $logo==false || $logo=='' ? plugins_url('assets/images/add-on-logo.png', __FILE__ ) : $logo;
+    $logo = $logo==false || $logo=='' ? plugins_url('../../assets/images/add-on-logo.png', __FILE__ ) : $logo;
     $fc_addons[] = array('content_fn'=>$content,'plugin_id'=>$plugin_id,'title'=>$title,'controller'=>$controller,'logo'=>$logo);
     $fc_templates[$title] = $templates;
     if ( $trigger == true ) {
       $fc_triggers[] = $title;
     }
-  }\n\n    public function getAddonData($addon, $id) {
+  }
+
+  public function getAddonData($addon, $id) {
     global $wpdb, $fc_forms_table;
     if ( !isset($id) || !ctype_digit($id) ) {
       return false;
