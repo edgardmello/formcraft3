@@ -376,9 +376,24 @@ jQuery(document).ready(function() {
 			jQthis.addClass('active')
 		}
 	})
-	jQuery('body').on('click', '.form-cover-builder', function(event) {
-		if (jQuery(event.target).parents('.fc-form').length === 0) {
-			jQuery('.iris-picker').hide()
+	document.addEventListener('mousedown', function(event) {
+		const $target = jQuery(event.target)
+		const isOutside = $target.closest('.form-element').length === 0 &&
+						 $target.closest('.form-options').length === 0 &&
+						 $target.closest('.field-actions-sidebar').length === 0 &&
+						 $target.closest('#main-options-panel').length === 0 &&
+						 $target.closest('#form_styling_box').length === 0 &&
+						 $target.closest('#form_addon_box').length === 0 &&
+						 $target.closest('#form_options_box').length === 0 &&
+						 $target.closest('#form_logic_box').length === 0 &&
+						 $target.closest('[id$="_button"]').length === 0 &&
+						 $target.closest('.iris-picker').length === 0 &&
+						 $target.closest('.wp-color-picker').length === 0 &&
+						 $target.closest('.iris-square').length === 0 &&
+						 $target.closest('.iris-slider').length === 0 &&
+						 !$target.hasClass('formcraft-icon')
+
+		if (isOutside) {
 			if (jQuery('#form_styling_box').hasClass('state-true')) {
 				jQuery('#form_styling_button').trigger('click')
 			}
@@ -391,9 +406,17 @@ jQuery(document).ready(function() {
 			if (jQuery('#form_logic_box').hasClass('state-true')) {
 				jQuery('#form_logic_button').trigger('click')
 			}
-			jQuery('.options-true .form-element-html').trigger('click')
+			let cover = jQuery('#formcraft-builder-cover')
+			if (cover.length) {
+				let scope = angular.element(cover).scope()
+				if (scope && scope.closeAllOptions) {
+					scope.$apply(() => {
+						scope.closeAllOptions()
+					})
+				}
+			}
 		}
-	})
+	}, true)
 	jQuery('body').on('click', '.trigger-help', function() {
 		jQuery('#help-content-content').html('.')
 		jQuery('.fc_modal').fc_modal('hide')
@@ -1281,6 +1304,7 @@ FormCraftApp.controller('FormController', function($scope, $locale, $http, $time
 	function createOptions() {
 		let options = {
 			connectWith: '.form-page-content',
+			handle: '.move',
 			helper: '',
 			start: (event, ui) => {
 				ui.placeholder.html(ui.item[0].innerHTML)
@@ -1929,11 +1953,12 @@ FormCraftApp.controller('FormController', function($scope, $locale, $http, $time
 							let xF = otherFields.indexOf(x.type)
 							$scope.Builder.FormElements[pageNos][y].element = `<div compile='addField.others[${xF}].fieldHTMLTemplate'></div>`
 							$scope.Builder.FormElements[pageNos][y].elementOptions = `<div compile='addField.others[${xF}].fieldOptionTemplate'></div>`
-						}
-						if (paymentFields.indexOf(x.type) > -1) {
+						} else if (paymentFields.indexOf(x.type) > -1) {
 							let xF = paymentFields.indexOf(x.type)
 							$scope.Builder.FormElements[pageNos][y].element = `<div compile='addField.payments[${xF}].fieldHTMLTemplate'></div>`
 							$scope.Builder.FormElements[pageNos][y].elementOptions = `<div compile='addField.payments[${xF}].fieldOptionTemplate'></div>`
+						} else if (typeof $scope.fieldOptionTemplate[x.type] !== 'undefined') {
+							$scope.Builder.FormElements[pageNos][y].elementOptions = `<div compile='fieldOptionTemplate["${x.type}"]'></div>`
 						}
 					})
 				})
@@ -2041,20 +2066,29 @@ FormCraftApp.controller('FormController', function($scope, $locale, $http, $time
 			return false
 		}
 		$event.preventDefault()
-		$scope.Builder.FormElements[$parent][$index].showOptions = !$scope.Builder.FormElements[$parent][$index].showOptions
-		let open = false
-		for (let page in $scope.Builder.FormElements) {
-			for (let element in $scope.Builder.FormElements[page]) {
-				if ($scope.Builder.FormElements[page][element].showOptions === true) {
-					open = true
-				}
-			}
+		let currentState = $scope.Builder.FormElements[$parent][$index].showOptions
+		$scope.closeAllOptions()
+		$scope.Builder.FormElements[$parent][$index].showOptions = !currentState
+		if ($scope.Builder.FormElements[$parent][$index].showOptions) {
+			$scope.Builder.FormElements[$parent][$index].activeTab = 'general'
 		}
+		let open = $scope.Builder.FormElements[$parent][$index].showOptions
 		if (open === true) {
 			jQuery('.fc-form').addClass('options-fade')
 		} else {
 			jQuery('.fc-form').removeClass('options-fade')
 		}
+	}
+	$scope.closeAllOptions = function() {
+		$scope.Builder.FormElements.forEach((page) => {
+			page.forEach((element) => {
+				element.showOptions = false
+			})
+		})
+		jQuery('.fc-form').removeClass('options-fade')
+	}
+	$scope.setTab = function(element, tab) {
+		element.activeTab = tab
 	}
 	$scope.addLogic = function() {
 		if (typeof $scope.Builder.Config.Logic === 'undefined') {
