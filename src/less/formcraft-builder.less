@@ -1842,8 +1842,8 @@ CSS to be used on the form editor page
     }
 }
 
-/* Show action icons on hover or when options are open */
-.form-element:hover .field-actions-sidebar,
+/* Show action icons when field is selected (clicked) or options are open */
+.form-element.selected .field-actions-sidebar,
 .form-element.options-true .field-actions-sidebar {
     opacity: 1 !important;
     transform: translateX(0) !important;

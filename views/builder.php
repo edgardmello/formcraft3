@@ -1265,16 +1265,29 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 					</div>
 					<!--RTH-->
 					<div ui-sortable="sortableOptions[$index]" ng-model='page' class='form-page-content'>
-						<div ng-class-odd="'odd'" data-identifier='{{element.identifier}}' ng-class='["form-element", "form-element-"+element.identifier, "options-"+element.showOptions, "form-element-"+$index, "default-"+element.elementDefaults.hidden_default, "form-element-type-"+element.type, "is-required-"+element.elementDefaults.required]' ng-class-even="'even'" ng-repeat='element in page track by element.identifier' data-index='{{$index}}' style='width: {{element.elementDefaults.field_width}}'>
-							<div ng-click='toggleOptions($event, $parent.$index, $index)' watch-show-options='{{element.showOptions}}' class='form-element-html' compile='element.element'>
+						<div ng-class-odd="'odd'" data-identifier='{{element.identifier}}' ng-class='["form-element", "form-element-"+element.identifier, "options-"+element.showOptions, "form-element-"+$index, "default-"+element.elementDefaults.hidden_default, "form-element-type-"+element.type, "is-required-"+element.elementDefaults.required]' ng-class-even="'even'" ng-repeat='element in page track by element.identifier' data-index='{{$index}}' style='width: {{element.elementDefaults.field_width}}' ng-click='selectField($parent.$index, $index)'>
+							<div watch-show-options='{{element.showOptions}}' class='form-element-html' compile='element.element' ng-click='toggleOptions($event, $parent.$index, $index)'>
 							</div>
 							<!--RFH-->
-							<div class='form-options animate-{{element.showOptionsAnimate}} state-{{element.showOptions}}'>
+							<div class='field-actions-sidebar'>
+								<div class='action-icon settings' ng-click='toggleOptions($event, $parent.$index, $index)' title='<?php esc_attr_e('Settings','formcraft'); ?>'>
+									<i class='formcraft-icon'>settings</i>
+								</div>
+								<div class='action-icon move' title='<?php esc_attr_e('Move','formcraft'); ?>'>
+									<i class='formcraft-icon'>open_with</i>
+								</div>
+								<div class='action-icon delete' ng-click='removeFormElement($parent.$index, $index)' title='<?php esc_attr_e('Delete','formcraft'); ?>'>
+									<i class='formcraft-icon'>delete</i>
+								</div>
+							</div>
+							<div class='form-options animate-{{element.showOptionsAnimate}} state-{{element.showOptions}} active-tab-{{element.activeTab || "general"}}'>
 								<div class='options-head'>
 									<div title='<?php esc_attr_e('Field ID','formcraft'); ?>' class='field-id'>{{element.identifier}}</div>
-									<i title='<?php esc_attr_e('Delete Field','formcraft'); ?>' ng-click='removeFormElement($parent.$index, $index)' class='delete formcraft-icon'>add_circle</i>
-									<i title='<?php esc_attr_e('Duplicate Field','formcraft'); ?>' ng-click='duplicateFormElement($parent.$index, $index)' class='duplicate formcraft-icon'>add_circle</i>
-									<i title='<?php esc_attr_e('Minimize Options','formcraft'); ?>' ng-click='toggleOptions($event, $parent.$index, $index)' class='minimize formcraft-icon'>remove_circle</i>
+									<div class='field-options-tabs'>
+										<span ng-click='setTab(element, "general")' ng-class='{active: element.activeTab == "general" || !element.activeTab}'>General</span>
+										<span ng-click='setTab(element, "validation")' ng-class='{active: element.activeTab == "validation"}'>Validation</span>
+										<span ng-click='setTab(element, "styling")' ng-class='{active: element.activeTab == "styling"}'>Styling</span>
+									</div>
 								</div>
 								<div class='options-main' compile='element.elementOptions'></div>
 							</div>

@@ -2068,6 +2068,7 @@ FormCraftApp.controller('FormController', function($scope, $locale, $http, $time
 		$event.preventDefault()
 		let currentState = $scope.Builder.FormElements[$parent][$index].showOptions
 		$scope.closeAllOptions()
+		$scope.selectField($parent, $index)
 		$scope.Builder.FormElements[$parent][$index].showOptions = !currentState
 		if ($scope.Builder.FormElements[$parent][$index].showOptions) {
 			$scope.Builder.FormElements[$parent][$index].activeTab = 'general'
@@ -2077,6 +2078,15 @@ FormCraftApp.controller('FormController', function($scope, $locale, $http, $time
 			jQuery('.fc-form').addClass('options-fade')
 		} else {
 			jQuery('.fc-form').removeClass('options-fade')
+		}
+	}
+	$scope.selectField = function($parent, $index) {
+		// Remove selected class from all fields
+		jQuery('.form-element').removeClass('selected')
+		// Add selected class to clicked field
+		const $field = jQuery(`.form-element-${$index}`)
+		if ($field.length) {
+			$field.addClass('selected')
 		}
 	}
 	$scope.closeAllOptions = function() {
