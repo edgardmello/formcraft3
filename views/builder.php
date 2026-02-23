@@ -1266,7 +1266,7 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 					<!--RTH-->
 					<div ui-sortable="sortableOptions[$index]" ng-model='page' class='form-page-content'>
 						<div ng-class-odd="'odd'" data-identifier='{{element.identifier}}' ng-class='["form-element", "form-element-"+element.identifier, "options-"+element.showOptions, "form-element-"+$index, "default-"+element.elementDefaults.hidden_default, "form-element-type-"+element.type, "is-required-"+element.elementDefaults.required]' ng-class-even="'even'" ng-repeat='element in page track by element.identifier' data-index='{{$index}}' style='width: {{element.elementDefaults.field_width}}' ng-click='selectField($parent.$index, $index)'>
-							<div watch-show-options='{{element.showOptions}}' class='form-element-html' compile='element.element' ng-click='toggleOptions($event, $parent.$index, $index)'>
+							<div watch-show-options='{{element.showOptions}}' class='form-element-html' compile='element.element'>
 							</div>
 							<!--RFH-->
 							<div class='field-actions-sidebar'>
