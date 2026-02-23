@@ -1788,10 +1788,140 @@ CSS to be used on the form editor page
 			}
 		}
 		.form-element {
-			position: relative;
-			&.options-true {
-				z-index: 999;
-			}
+    position: relative;
+    &.options-true {
+        z-index: 999;
+    }
+}
+
+/* Field Action Icons Sidebar */
+.field-actions-sidebar {
+    position: absolute;
+    right: -42px;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    transform: translateX(-10px);
+    pointer-events: none;
+    z-index: 1000;
+
+    .action-icon {
+        width: 34px;
+        height: 34px;
+        background: var(--fc-color-surface);
+        border: 1px solid var(--fc-color-border);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: var(--fc-color-text-muted);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        pointer-events: auto;
+        transition: all 0.2s;
+
+        &:hover {
+            background: var(--fc-color-surface-alt);
+            color: var(--fc-color-primary);
+            border-color: var(--fc-color-primary);
+            transform: scale(1.05);
+        }
+
+        &.delete:hover {
+            color: #ef4444;
+            border-color: #ef4444;
+        }
+
+        .formcraft-icon {
+            font-size: 18px;
+            margin: 0;
+        }
+    }
+}
+
+/* Show action icons on hover or when options are open */
+.form-element:hover .field-actions-sidebar,
+.form-element.options-true .field-actions-sidebar {
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+    pointer-events: auto !important;
+}
+
+/* Tabbed Field Options */
+.field-options-tabs {
+    display: inline-flex;
+    margin-left: 24px;
+    gap: 16px;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--fc-color-text-muted);
+
+    span {
+        cursor: pointer;
+        padding: 4px 0;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+
+        &:hover {
+            color: var(--fc-color-text);
+        }
+
+        &.active {
+            color: var(--fc-color-primary);
+            border-bottom-color: var(--fc-color-primary);
+        }
+    }
+}
+
+.form-options {
+    width: 32em !important;
+    
+    .options-head {
+        display: flex !important;
+        align-items: center;
+        padding: 1.2em 1.2em 1em !important;
+        
+        .field-id {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            color: #64748b;
+        }
+        
+        .minimize {
+            margin-left: auto;
+            float: none !important;
+        }
+    }
+
+    .options-main {
+        min-height: 100px;
+        padding: 1.5em !important;
+        
+        /* Tab Filtering Logic */
+        .opt-general,
+        .opt-validation,
+        .opt-styling {
+            display: none;
+        }
+    }
+
+    &.active-tab-general .options-main .opt-general {
+        display: block;
+    }
+    &.active-tab-validation .options-main .opt-validation {
+        display: block;
+    }
+    &.active-tab-styling .options-main .opt-styling {
+        display: block;
+    }
+}
 			&.default-true:after {
 				.formcraft-icon-mixin();
 				content: 'visibility_off';
@@ -2236,8 +2366,6 @@ CSS to be used on the form editor page
 			}
 		}
 	}
-}
-
 /* Hacks */
 
 body.folded #formcraft-builder-cover #main-options-panel,
@@ -2281,4 +2409,170 @@ body.folded #formcraft-builder-cover .option-box {
     border: 2px dashed var(--fc-color-primary) !important;
     opacity: 0.5 !important;
     border-radius: var(--fc-radius-md) !important;
+}
+
+/* --- NEW UI IMPROVEMENTS --- */
+
+.form-element {
+    position: relative;
+    &.options-true {
+        z-index: 999;
+    }
+}
+
+/* Field Action Icons Sidebar */
+.field-actions-sidebar {
+    position: absolute;
+    right: -42px;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    transform: translateX(-10px);
+    pointer-events: none;
+    z-index: 1000;
+
+    .action-icon {
+        width: 34px;
+        height: 34px;
+        background: var(--fc-color-surface);
+        border: 1px solid var(--fc-color-border);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: var(--fc-color-text-muted);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        pointer-events: auto;
+        transition: all 0.2s;
+
+        &:hover {
+            background: var(--fc-color-surface-alt);
+            color: var(--fc-color-primary);
+            border-color: var(--fc-color-primary);
+            transform: scale(1.05);
+        }
+
+        &.delete:hover {
+            color: #ef4444;
+            border-color: #ef4444;
+        }
+
+        .formcraft-icon {
+            font-size: 18px;
+            margin: 0;
+        }
+    }
+}
+
+.form-element.options-true .field-actions-sidebar {
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+}
+
+/* Tabbed Field Options */
+.field-options-tabs {
+    display: inline-flex;
+    margin-left: 24px;
+    gap: 16px;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--fc-color-text-muted);
+
+    span {
+        cursor: pointer;
+        padding: 4px 0;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+
+        &:hover {
+            color: var(--fc-color-text);
+        }
+
+        &.active {
+            color: var(--fc-color-primary);
+            border-bottom-color: var(--fc-color-primary);
+        }
+    }
+}
+
+.form-options {
+    width: 34em !important;
+    
+    .options-head {
+        display: flex !important;
+        align-items: center !important;
+        padding: 0 1.2em !important;
+        height: 54px;
+        min-height: 54px;
+        box-sizing: border-box;
+        border-bottom: 1px solid var(--fc-color-border);
+        background: var(--fc-color-surface);
+        
+        .field-id {
+            background: #f1f5f9;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748b;
+            line-height: 1;
+            margin-right: 12px;
+        }
+    }
+
+    .field-options-tabs {
+        display: flex;
+        gap: 20px;
+        height: 100%;
+        align-items: center;
+
+        span {
+            cursor: pointer;
+            padding: 18px 0;
+            font-weight: 700;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--fc-color-text-muted);
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+
+            &:hover {
+                color: var(--fc-color-text);
+            }
+
+            &.active {
+                color: var(--fc-color-primary);
+                border-bottom-color: var(--fc-color-primary);
+            }
+        }
+    }
+
+    .options-main {
+        min-height: 150px;
+        padding: 1.5em !important;
+        background: var(--fc-color-surface-alt);
+        
+        .opt-general,
+        .opt-validation,
+        .opt-styling {
+            display: none !important;
+        }
+    }
+
+    &.active-tab-general .options-main .opt-general {
+        display: block !important;
+    }
+    &.active-tab-validation .options-main .opt-validation {
+        display: block !important;
+    }
+    &.active-tab-styling .options-main .opt-styling {
+        display: block !important;
+    }
 }
