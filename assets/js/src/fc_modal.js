@@ -16,25 +16,23 @@ jQuery('body').on('click focus touchstart', '.fc_close, .close', function() {
   setTimeout(function() { jQuery('#' + identifier).fc_modal('hide'); }, 200);
 })
 
-  jQuery('body').on('click', '.fc_close, .close, .fc_modal-backdrop', function() {
-  var identifier = jQuery(this).parents('.fc_modal').attr('id')
-  jQuery('#' + identifier).removeClass('fc_in')
-  jQuery('.fc_modal-backdrop').removeClass('fc_in')
-  setTimeout(function() { jQuery('#' + identifier).fc_modal('hide'); }, 200)
-})
-
-  jQuery('body').on('click focus touchstart', '.fc_close2', function() {
+jQuery('body').on('click focus touchstart', '.fc_close2', function() {
   var id = jQuery(this).parents('.fc_modal').attr('id')
   jQuery('#' + id).removeClass('fc_in')
   jQuery('.fc_modal-backdrop').removeClass('fc_in')
   setTimeout(function() { jQuery('#' + id).fc_modal('hide'); }, 200);
 })
 
-  jQuery('body').on('click', '.fc_close2, .fc_modal-backdrop', function() {
-  var id = jQuery(this).parents('.fc_modal').attr('id')
-  jQuery('#' + id).removeClass('fc_in')
-  jQuery('.fc_modal-backdrop').removeClass('fc_in')
-  setTimeout(function() { jQuery('#' + id).fc_modal('hide'); }, 200)
+// Backdrop click handler - only close if clicking directly on backdrop, not on child elements
+jQuery('body').on('click', '.fc_modal-backdrop', function(e) {
+  if (e.target === this) {
+    jQuery('.fc_modal.fc_in').each(function() {
+      var identifier = jQuery(this).attr('id')
+      jQuery('#' + identifier).removeClass('fc_in')
+      jQuery('.fc_modal-backdrop').removeClass('fc_in')
+      setTimeout(function() { jQuery('#' + identifier).fc_modal('hide'); }, 200)
+    })
+  }
 })
 
 });
