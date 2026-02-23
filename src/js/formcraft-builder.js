@@ -2072,6 +2072,12 @@ FormCraftApp.controller('FormController', function($scope, $locale, $http, $time
 		$scope.Builder.FormElements[$parent][$index].showOptions = !currentState
 		if ($scope.Builder.FormElements[$parent][$index].showOptions) {
 			$scope.Builder.FormElements[$parent][$index].activeTab = 'general'
+			// Close other panels when opening field options
+			$scope.Builder.Config.showAddField = false
+			$scope.Builder.Config.showOptions = false
+			$scope.Builder.Config.showStyling = false
+			$scope.Builder.Config.showAddons = false
+			$scope.Builder.Config.showLogic = false
 		}
 		let open = $scope.Builder.FormElements[$parent][$index].showOptions
 		if (open === true) {
