@@ -121,3 +121,35 @@ Use the skill formcraft-developer to perform common tasks like:
 - Adding a new field type;
 - Modifying form styles;
 - Implementing a new action/filter hook;
+
+---
+
+## CSS/LESS Development Notes
+
+### Build Process
+
+- **LESS sources:** `src/less/*.less`
+- **Compiled CSS:** `dist/*.css` (minified)
+- **Build command:** `npm run build:css`
+- The build script (`build-css.js`) compiles LESS files and minifies them using CleanCSS
+
+### Builder Styles Structure
+
+The form builder styles in `formcraft-builder.less` have a complex nested structure:
+
+- `#formcraft-builder-cover` (line 154) - Main wrapper
+  - `#form-cover-html` (line 1687) - Form preview area
+    - `.form-element` (line 1790, then nested via `&` around line 1925) - Individual form fields
+      - `.form-options` (line 1973) - Field options modal panel
+
+**Important:** The `.form-options` modal positioning is controlled by CSS within `#formcraft-builder-cover #form-cover-html .form-element .form-options`. When modifying positioning properties:
+
+- `left: 100%` positions modal to the RIGHT of the field
+- `right: 100%` positions modal to the LEFT of the field
+- The `:before` pseudo-element creates the arrow pointer and needs matching transform:
+  - For left-side modal: `left: 100%; margin-left: -10px; transform: rotate(45deg)`
+  - For right-side modal: `right: 100%; margin-right: -10px; transform: rotate(-45deg)`
+
+### LESS Nesting Gotchas
+
+The LESS file has some unusual nesting patterns due to historical code structure. The `.form-options` block around line 1973 appears to close at line 1924 (which is actually closing a GLOBAL `.form-options` block from line 1881), then continues with `&`-prefixed selectors that are still within `#form-cover-html .form-element`. Be careful when adding new rules - verify the compiled CSS output to ensure selectors match the intended scope.

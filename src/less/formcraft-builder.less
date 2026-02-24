@@ -1976,6 +1976,9 @@ CSS to be used on the form editor page
 				position: absolute;
 				display: none;
 				top: -6em;
+				right: 100%;
+				margin-right: 1.5em;
+				left: auto;
 				background: var(--fc-color-surface);
 				width: 30em;
 				border-radius: @borderRadius;
@@ -2167,31 +2170,12 @@ CSS to be used on the form editor page
 				background-color: @backgroundGreyOne;
 				margin-top: -16px;
 				top: 8em;
-			}
-			.form-options.state-true {
-				display: block;
-			}
-		}
-		.form-element:nth-child(odd) {
-			.form-options {
-				left: 100%;
-				margin-left: 1.5em;
-			}
-			.form-options:before {
-				right: 100%;
-				margin-right: -10px;
-				transform: rotate(-45deg);
-			}
-		}
-		.form-element:nth-child(even) {
-			.form-options {
-				right: 100%;
-				margin-right: 3em;
-			}
-			.form-options:before {
 				left: 100%;
 				margin-left: -10px;
 				transform: rotate(45deg);
+			}
+			.form-options.state-true {
+				display: block;
 			}
 		}
 	}
