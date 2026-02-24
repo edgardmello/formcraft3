@@ -6,7 +6,7 @@
   Description: Premium WordPress form and survey builder. Make amazing forms, incredibly fast.
   Author: nCrafts
   Author URI: http://ncrafts.net
-  Version: 3.9.12
+  Version: 3.9.13
   Domain Path: /languages
   Text Domain: formcraft
   */
@@ -31,7 +31,7 @@
   $fc_templates = array();
   $fc_triggers = array();
   $fc_templates['General'] = plugin_dir_path( __FILE__ ).'templates/';
-  $fc_meta['version'] = '3.9.12';
+  $fc_meta['version'] = '3.9.13';
   $fc_meta['f3_multi_site_addon'] = is_multisite() ? false : true;
   $fc_meta['user_can'] = strpos(get_site_url(), 'formcraft-wp.com/demo') > -1 || strpos(get_site_url(), 'formcraft-wp.com/plugin-demo') > -1 ? 'read' : 'activate_plugins';
   $fc_meta['preview_mode'] = strpos(get_site_url(), 'formcraft-wp.com/demo') > -1 || strpos(get_site_url(), 'formcraft-wp.com/plugin-demo') > -1 ? true : false;
