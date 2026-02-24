@@ -115,101 +115,246 @@ $backgrounds[] = array('Jeans','url('.$base.'jeans.png)','url('.$base.'jeans.png
 		<div class='option-box  state-{{Builder.Config.showLogic}}' id='form_logic_box'>
 			<div id='logic_tabs' class='nav-content-slide'>
 				<div class='active'>
+					<!-- Filters Bar -->
+					<div id='logic-filters-bar'>
+						<div class='filter-row'>
+							<div class='filter-search'>
+								<i class='formcraft-icon'>search</i>
+								<input type='text'
+									   ng-model='logicSearchQuery'
+									   placeholder='<?php esc_html_e('Search by field name...','formcraft'); ?>'/>
+							</div>
+							<div class='filter-action-type'>
+								<select ng-model='logicFilterActionType'>
+									<option value=''><?php esc_html_e('All Actions','formcraft'); ?></option>
+									<option value='show_fields'><?php esc_html_e('Show Fields','formcraft'); ?></option>
+									<option value='hide_fields'><?php esc_html_e('Hide Fields','formcraft'); ?></option>
+									<option value='email_to'><?php esc_html_e('Send Email','formcraft'); ?></option>
+									<option value='redirect_to'><?php esc_html_e('Redirect','formcraft'); ?></option>
+									<option value='trigger_integration'><?php esc_html_e('Integration','formcraft'); ?></option>
+									<option value='set_value'><?php esc_html_e('Set Value','formcraft'); ?></option>
+								</select>
+							</div>
+							<div class='filter-group'>
+								<select ng-model='logicFilterGroup'>
+									<option value=''><?php esc_html_e('All Groups','formcraft'); ?></option>
+									<option ng-repeat='group in Builder.Config.LogicGroups track by group.group_id' value='{{group.group_id}}'>{{group.group_name}}</option>
+								</select>
+							</div>
+							<button class='clear-filters-btn' ng-click='clearLogicFilters()' ng-show='logicSearchQuery || logicFilterActionType || logicFilterGroup'>
+								<?php esc_html_e('Clear','formcraft'); ?>
+							</button>
+							<button class='expand-collapse-btn' ng-click='collapsedLogics = {}' ng-show='Object.keys(collapsedLogics).length > 0'>
+								<i class='formcraft-icon'>expand_more</i>
+							</button>
+							<button class='expand-collapse-btn' ng-click='collapseAllLogics()' ng-show='Object.keys(collapsedLogics).length === 0'>
+								<i class='formcraft-icon'>expand_less</i>
+							</button>
+						</div>
+					</div>
+
+					<!-- Groups Manager -->
+					<div id='logic-groups-manager'>
+						<div class='groups-header'>
+							<h3><?php esc_html_e('Logic Groups','formcraft'); ?></h3>
+							<button class='add-group-btn' ng-click='addLogicGroup()' title='<?php esc_html_e('Add Group','formcraft'); ?>'>
+								<i class='formcraft-icon'>add</i>
+							</button>
+						</div>
+						<div class='groups-list' ng-show='Builder.Config.LogicGroups && Builder.Config.LogicGroups.length > 1'>
+							<div ng-repeat='group in Builder.Config.LogicGroups track by group.group_id' class='group-item'>
+								<span class='group-color-dot' ng-style='{background: group.group_color}'></span>
+								<input type='text' ng-model='group.group_name' class='group-name-input' placeholder='<?php esc_html_e('Group Name','formcraft'); ?>'/>
+								<input type='color' ng-model='group.group_color' class='group-color-picker'/>
+								<button ng-click='deleteLogicGroup(group.group_id)' ng-show='group.group_id !== "default"' class='group-delete-btn' title='<?php esc_html_e('Delete Group','formcraft'); ?>'>
+									<i class='formcraft-icon'>delete</i>
+								</button>
+							</div>
+						</div>
+					</div>
+
 					<div id='add-logic-heads'>
 						<div><?php esc_html_e('Conditions', 'formcraft'); ?></div>
 						<div><?php esc_html_e('Actions','formcraft'); ?></div>
 					</div>
-					<div class='add-logic-area' ng-repeat='logic in Builder.Config.Logic track by $index'>
-						<div class='logic-text logic-text-if'>
-							<?php esc_html_e('if','formcraft'); ?>
+
+					<!-- Logic Cards -->
+					<div class='add-logic-area logic-card'
+						 ng-repeat='logic in Builder.Config.Logic track by $index'
+						 ng-show='shouldShowLogic(logic, $index)'
+						 data-logic-index='{{$index}}'>
+						<!-- Card Header -->
+						<div class='logic-card-header' ng-click='toggleLogicCard($index)'>
+							<span class='logic-card-indicator' ng-style='{background: getGroupColor(logic[3]?.group_id)}'></span>
+							<span class='logic-card-name'>{{ getLogicName(logic, $index) }}</span>
+							<span class='logic-card-summary'>
+								<span ng-show='logic[0].length > 0'>{{ logic[0].length }} <?php esc_html_e('conditions','formcraft'); ?></span>
+								<span ng-show='logic[1].length > 0'>• {{ logic[1].length }} <?php esc_html_e('actions','formcraft'); ?></span>
+							</span>
+							<span class='logic-card-actions'>
+								<button ng-click='editLogicName($index, $event)' title='<?php esc_html_e('Edit','formcraft'); ?>'>
+									<i class='formcraft-icon'>edit</i>
+								</button>
+								<button ng-click='duplicateLogic($index, $event)' title='<?php esc_html_e('Duplicate','formcraft'); ?>'>
+									<i class='formcraft-icon'>content_copy</i>
+								</button>
+								<button ng-click='removeLogic($index)' title='<?php esc_html_e('Delete','formcraft'); ?>'>
+									<i class='formcraft-icon'>delete</i>
+								</button>
+							</span>
+							<i class='formcraft-icon collapse-icon'
+							   ng-class='{"keyboard_arrow_down": !isLogicCollapsed($index), "keyboard_arrow_up": isLogicCollapsed($index)}'>
+							</i>
 						</div>
-						<div class='width-45 group actions-nos-{{Builder.Config.Logic[$index][0].length}}'>
-							<div ng-repeat='action in Builder.Config.Logic[$index][0] track by $index' class='group-row show-{{Builder.Config.Logic[$parent.$index][0].length}}'>
-								<div class='width-30'>
-									<select id='select_fix_{{$parent.$index}}_{{$index}}' ng-model='action[0]'>
-										<option value=''>(<?php esc_html_e('field','formcraft'); ?>)</option>
-										<optgroup ng-repeat='page in Builder.FormElements track by $index' label='{{Builder.Config.page_names[$index]}}'>
-											<option ng-repeat='element in page track by $index' value='{{element.identifier}}'>{{element.elementDefaults.main_label}}</option>
-										</optgroup>
-									</select>
-								</div>
-								<div class='width-33'>
-									<select ng-model='action[1]'>
-										<option value=''>(<?php esc_html_e('trigger','formcraft'); ?>)</option>
-										<option value='equal_to'><?php esc_html_e('is equal to','formcraft'); ?></option>
-										<option value='not_equal_to'><?php esc_html_e('is not equal to','formcraft'); ?></option>
-										<option value='contains'><?php esc_html_e('contains','formcraft'); ?></option>
-										<option value='contains_not'><?php esc_html_e('does not contain','formcraft'); ?></option>
-										<option value='greater_than'><?php esc_html_e('is greater than','formcraft'); ?></option>
-										<option value='less_than'><?php esc_html_e('is less than','formcraft'); ?></option>
-									</select>
-								</div>
-								<div class='width-30'>
-									<input type='text' ng-model='action[2]' placeholder='...'>
-								</div>
-								<div ng-click='removeLogicAction($parent.$index, $index)' class='remove-action'>
-									×
-								</div>
-								<div class='and-or'>
-									<select ng-model='Builder.Config.Logic[$parent.$index][2]'>
-										<option value='and'><?php esc_html_e('And','formcraft'); ?></option>
-										<option value='or'><?php esc_html_e('Or','formcraft'); ?></option>
-									</select>
-								</div>
+
+						<!-- Collapsible Content -->
+						<div class='logic-card-content' ng-show='!isLogicCollapsed($index)'>
+							<div class='logic-text logic-text-if'>
+								<?php esc_html_e('if','formcraft'); ?>
 							</div>
-							<span ng-click='addLogicAction($index)' class='add-group'><?php esc_html_e('add condition row','formcraft'); ?></span>
-						</div>
-						<div class='logic-text logic-text-then'>
-							<?php esc_html_e('then','formcraft'); ?>
-						</div>
-						<div class='width-40 group'>
-							<div ng-repeat='result in Builder.Config.Logic[$index][1] track by $index' class='group-row'>
-								<div class='width-100 sign-and'>
-									&
+							<div class='width-45 group actions-nos-{{Builder.Config.Logic[$index][0].length}}'>
+								<div ng-repeat='action in Builder.Config.Logic[$index][0] track by $index' class='group-row show-{{Builder.Config.Logic[$parent.$index][0].length}}'>
+									<div class='width-30'>
+										<select id='select_fix_{{$parent.$index}}_{{$index}}' ng-model='action[0]'>
+											<option value=''>(<?php esc_html_e('field','formcraft'); ?>)</option>
+											<optgroup ng-repeat='page in Builder.FormElements track by $index' label='{{Builder.Config.page_names[$index]}}'>
+												<option ng-repeat='element in page track by $index' value='{{element.identifier}}'>{{element.elementDefaults.main_label}}</option>
+											</optgroup>
+										</select>
+									</div>
+									<div class='width-33'>
+										<select ng-model='action[1]'>
+											<option value=''>(<?php esc_html_e('trigger','formcraft'); ?>)</option>
+											<optgroup label="<?php esc_html_e('Comparison','formcraft'); ?>">
+												<option value='equal_to'><?php esc_html_e('is equal to','formcraft'); ?></option>
+												<option value='not_equal_to'><?php esc_html_e('is not equal to','formcraft'); ?></option>
+												<option value='contains'><?php esc_html_e('contains','formcraft'); ?></option>
+												<option value='contains_not'><?php esc_html_e('does not contain','formcraft'); ?></option>
+												<option value='greater_than'><?php esc_html_e('is greater than','formcraft'); ?></option>
+												<option value='less_than'><?php esc_html_e('is less than','formcraft'); ?></option>
+											</optgroup>
+											<optgroup label="<?php esc_html_e('State','formcraft'); ?>">
+												<option value='is_empty'><?php esc_html_e('is empty','formcraft'); ?></option>
+												<option value='is_not_empty'><?php esc_html_e('is not empty','formcraft'); ?></option>
+												<option value='is_checked'><?php esc_html_e('is checked','formcraft'); ?></option>
+												<option value='is_not_checked'><?php esc_html_e('is not checked','formcraft'); ?></option>
+											</optgroup>
+											<optgroup label="<?php esc_html_e('Pattern','formcraft'); ?>">
+												<option value='starts_with'><?php esc_html_e('starts with','formcraft'); ?></option>
+												<option value='ends_with'><?php esc_html_e('ends with','formcraft'); ?></option>
+												<option value='regex'><?php esc_html_e('matches pattern','formcraft'); ?></option>
+												<option value='equals_any'><?php esc_html_e('equals any of','formcraft'); ?></option>
+											</optgroup>
+											<optgroup label="<?php esc_html_e('Date','formcraft'); ?>">
+												<option value='date_is'><?php esc_html_e('date is','formcraft'); ?></option>
+												<option value='date_before'><?php esc_html_e('date before','formcraft'); ?></option>
+												<option value='date_after'><?php esc_html_e('date after','formcraft'); ?></option>
+											</optgroup>
+										</select>
+									</div>
+									<div class='width-30'>
+										<input type='text' ng-model='action[2]' placeholder='...'>
+									</div>
+									<div ng-click='removeLogicAction($parent.$index, $index)' class='remove-action'>
+										×
+									</div>
+									<div class='and-or'>
+										<select ng-model='Builder.Config.Logic[$parent.$index][2]'>
+											<option value='and'><?php esc_html_e('And','formcraft'); ?></option>
+											<option value='or'><?php esc_html_e('Or','formcraft'); ?></option>
+										</select>
+									</div>
 								</div>
-								<div class='width-43 set-value-{{result[0]}}'>
-									<select ng-model='result[0]'>
-										<option value=''><?php esc_html_e('(action)','formcraft'); ?></option>
-										<option value='show_fields'><?php esc_html_e('show fields','formcraft'); ?></option>
-										<option value='hide_fields'><?php esc_html_e('hide fields','formcraft'); ?></option>
-										<option value='email_to'><?php esc_html_e('send email to','formcraft'); ?></option>
-										<option value='redirect_to'><?php esc_html_e('redirect to','formcraft'); ?></option>
-										<option value='trigger_integration'><?php esc_html_e('trigger integration','formcraft'); ?></option>
-										<option value='set_value'><?php esc_html_e('set value of','formcraft'); ?></option>
-									</select>
-									<select class='set-value-field' id='cons_select_fix_{{$parent.$index}}_{{$index}}' ng-model='result[4]'>
-										<option value=''>(<?php esc_html_e('field','formcraft'); ?>)</option>
-										<optgroup ng-repeat='page in Builder.FormElements track by $index' label='{{Builder.Config.page_names[$index]}}'>
-											<option ng-repeat='element in page track by $index' value='{{element.identifier}}'>{{element.elementDefaults.main_label}}</option>
-										</optgroup>
-									</select>
-								</div>
-								<div class='result-type result-type-{{result[0]}}'>
-									<input type='text' class='select-fields-logic' select-fields ng-model='result[1]' placeholder='(add fields)'/>
-									<input type='text' class='type-in-logic' ng-model='result[2]' placeholder='...'>
-									<?php
-									if ( isset($fc_triggers) && count($fc_triggers)>0 ) {
-										echo "<select class='trigger-intergration-select' ng-model='result[3]'>";
-										echo "<option value=''>".esc_html__('(select)','formcraft')."</option>";
-										foreach ($fc_triggers as $key => $value) {
-											$value = esc_html__($value);
-											echo "<option value='$value'>$value</option>";
+								<span ng-click='addLogicAction($index)' class='add-group'><?php esc_html_e('add condition row','formcraft'); ?></span>
+							</div>
+							<div class='logic-text logic-text-then'>
+								<?php esc_html_e('then','formcraft'); ?>
+							</div>
+							<div class='width-40 group'>
+								<div ng-repeat='result in Builder.Config.Logic[$index][1] track by $index' class='group-row'>
+									<div class='width-100 sign-and'>
+										&
+									</div>
+									<div class='width-43 set-value-{{result[0]}}'>
+										<select ng-model='result[0]'>
+											<option value=''><?php esc_html_e('(action)','formcraft'); ?></option>
+											<option value='show_fields'><?php esc_html_e('show fields','formcraft'); ?></option>
+											<option value='hide_fields'><?php esc_html_e('hide fields','formcraft'); ?></option>
+											<option value='email_to'><?php esc_html_e('send email to','formcraft'); ?></option>
+											<option value='redirect_to'><?php esc_html_e('redirect to','formcraft'); ?></option>
+											<option value='trigger_integration'><?php esc_html_e('trigger integration','formcraft'); ?></option>
+											<option value='set_value'><?php esc_html_e('set value of','formcraft'); ?></option>
+										</select>
+										<select class='set-value-field' id='cons_select_fix_{{$parent.$index}}_{{$index}}' ng-model='result[4]'>
+											<option value=''>(<?php esc_html_e('field','formcraft'); ?>)</option>
+											<optgroup ng-repeat='page in Builder.FormElements track by $index' label='{{Builder.Config.page_names[$index]}}'>
+												<option ng-repeat='element in page track by $index' value='{{element.identifier}}'>{{element.elementDefaults.main_label}}</option>
+											</optgroup>
+										</select>
+									</div>
+									<div class='result-type result-type-{{result[0]}}'>
+										<input type='text' class='select-fields-logic' select-fields ng-model='result[1]' placeholder='(add fields)'/>
+										<input type='text' class='type-in-logic' ng-model='result[2]' placeholder='...'>
+										<?php
+										if ( isset($fc_triggers) && count($fc_triggers)>0 ) {
+											echo "<select class='trigger-intergration-select' ng-model='result[3]'>";
+											echo "<option value=''>".esc_html__('(select)','formcraft')."</option>";
+											foreach ($fc_triggers as $key => $value) {
+												$value = esc_html__($value);
+												echo "<option value='$value'>$value</option>";
+											}
+											echo "</select>";
 										}
-										echo "</select>";
-									}
-									?>
+										?>
+									</div>
+									<div ng-click='removeLogicResult($parent.$index, $index)' class='remove-action'>
+										×
+									</div>
 								</div>
-								<div ng-click='removeLogicResult($parent.$index, $index)' class='remove-action'>
-									×
-								</div>
+								<div ng-click='addLogicResult($index)' class='add-group'><?php esc_html_e('add action row','formcraft'); ?></div>
 							</div>
-							<div ng-click='addLogicResult($index)' class='add-group'><?php esc_html_e('add action row','formcraft'); ?></div>
 						</div>
-						<div class='remove-logic' ng-click='removeLogic($index)'>×</div>
 					</div>
+
 					<div id='add-logic-cover'>
 						<button class='add-logic-button' ng-click='addLogic()'><?php esc_html_e('Add New Logic','formcraft'); ?></button>
 						<a class='trigger-help' data-post-id='9'><?php esc_html_e('how to use Conditional Logic', 'formcraft'); ?></a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Logic Name Modal -->
+		<div class='fc_modal fc_fade' id='logic_name_modal'>
+			<div class='fc_modal-dialog'>
+				<div class='fc_modal-content'>
+					<div class='fc_modal-header'>
+						<button class='fc_close' type='button' data-dismiss='fc_modal'>&times;</button>
+						<h4 class='fc_modal-title'><?php esc_html_e('Edit Logic','formcraft'); ?></h4>
+					</div>
+					<div class='fc_modal-body'>
+						<label><?php esc_html_e('Name this logic rule:','formcraft'); ?></label>
+						<input type='text'
+							   ng-model='tempLogicName'
+							   class='width-100'
+							   placeholder='<?php esc_html_e('e.g., Show address field','formcraft'); ?>'/>
+
+						<label style='margin-top: 16px; display:block;'><?php esc_html_e('Description (optional):','formcraft'); ?></label>
+						<textarea ng-model='tempLogicDescription'
+								  class='width-100'
+								  rows='3'
+								  placeholder='<?php esc_html_e('Add notes about when this logic applies...','formcraft'); ?>'></textarea>
+
+						<label style='margin-top: 16px; display:block;'><?php esc_html_e('Group:','formcraft'); ?></label>
+						<select ng-model='tempLogicGroupId' class='width-100'>
+							<option ng-repeat='group in Builder.Config.LogicGroups track by group.group_id' value='{{group.group_id}}'>{{group.group_name}}</option>
+						</select>
+
+						<div style='margin-top: 24px; text-align: right;'>
+							<button type='button' class='formcraft-button' ng-click='saveLogicName()'>
+								<?php esc_html_e('Save','formcraft'); ?>
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>

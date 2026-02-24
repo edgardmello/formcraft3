@@ -2106,15 +2106,171 @@ FormCraftApp.controller('FormController', function($scope, $locale, $http, $time
 	$scope.setTab = function(element, tab) {
 		element.activeTab = tab
 	}
+
+	// UUID Generator for logic and group IDs
+	const generateUUID = function() {
+		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+			const r = Math.random() * 16 | 0
+			const v = c === 'x' ? r : (r & 0x3 | 0x8)
+			return v.toString(16)
+		})
+	}
+
+	// Migration function for backward compatibility
+	const migrateLogicStructure = function(logic) {
+		if (!logic || !Array.isArray(logic)) return []
+		return logic.map((rule) => {
+			// If rule doesn't have metadata (length < 4), add it
+			if (rule.length < 4) {
+				rule[3] = {
+					logic_id: 'logic_' + generateUUID(),
+					logic_name: '',
+					group_id: 'default',
+					description: '',
+					enabled: true
+				}
+			}
+			return rule
+		})
+	}
+
+	// Ensure Logic has proper structure when loaded
+	$scope.ensureLogicStructure = function() {
+		if ($scope.Builder.Config.Logic && $scope.Builder.Config.Logic.length > 0) {
+			$scope.Builder.Config.Logic = migrateLogicStructure($scope.Builder.Config.Logic)
+		}
+		// Initialize default group if not exists
+		if (!$scope.Builder.Config.LogicGroups || $scope.Builder.Config.LogicGroups.length === 0) {
+			$scope.Builder.Config.LogicGroups = [{
+				group_id: 'default',
+				group_name: 'Default',
+				group_color: '#4a90d9',
+				collapsed: false
+			}]
+		}
+	}
+
+	// Logic Groups Management Functions
+	$scope.addLogicGroup = function() {
+		$scope.ensureLogicStructure()
+		const newGroupId = 'group_' + generateUUID()
+		$scope.Builder.Config.LogicGroups.push({
+			group_id: newGroupId,
+			group_name: `Group ${$scope.Builder.Config.LogicGroups.length + 1}`,
+			group_color: '#4a90d9',
+			collapsed: false
+		})
+	}
+
+	$scope.deleteLogicGroup = function(groupId) {
+		if (groupId === 'default') return // Cannot delete default group
+		// Move all logics from this group to default
+		if ($scope.Builder.Config.Logic) {
+			$scope.Builder.Config.Logic.forEach(logic => {
+				if (logic[3] && logic[3].group_id === groupId) {
+					logic[3].group_id = 'default'
+				}
+			})
+		}
+		// Remove the group
+		$scope.Builder.Config.LogicGroups = $scope.Builder.Config.LogicGroups.filter(g => g.group_id !== groupId)
+	}
+
+	$scope.getGroupColor = function(groupId) {
+		if (!$scope.Builder.Config.LogicGroups) return '#4a90d9'
+		const group = $scope.Builder.Config.LogicGroups.find(g => g.group_id === groupId)
+		return group ? group.group_color : '#4a90d9'
+	}
+
+	$scope.getLogicName = function(logic, index) {
+		if (!logic[3]) return `Logic ${index + 1}`
+		return logic[3].logic_name || `Logic ${index + 1}`
+	}
+
+	// Collapse state management
+	$scope.collapsedLogics = {}
+	$scope.isLogicCollapsed = function(index) {
+		return $scope.collapsedLogics[index] === true
+	}
+	$scope.toggleLogicCard = function(index) {
+		$scope.collapsedLogics[index] = !$scope.collapsedLogics[index]
+	}
+	$scope.collapseAllLogics = function() {
+		$scope.Builder.Config.Logic.forEach((_, i) => {
+			$scope.collapsedLogics[i] = true
+		})
+	}
+	$scope.expandAllLogics = function() {
+		$scope.collapsedLogics = {}
+	}
+
+	// Duplicate logic
+	$scope.duplicateLogic = function(index) {
+		$scope.ensureLogicStructure()
+		const logicCopy = angular.copy($scope.Builder.Config.Logic[index])
+		logicCopy[3] = {
+			...logicCopy[3],
+			logic_id: 'logic_' + generateUUID(),
+			logic_name: (logicCopy[3].logic_name || '') + ' (Copy)'
+		}
+		$scope.Builder.Config.Logic.splice(index + 1, 0, logicCopy)
+	}
+
+	// Edit logic name
+	$scope.editLogicName = function(index, $event) {
+		$event.stopPropagation()
+		$scope.editingLogicIndex = index
+		$scope.tempLogicName = $scope.Builder.Config.Logic[index][3]?.logic_name || ''
+		$scope.tempLogicDescription = $scope.Builder.Config.Logic[index][3]?.description || ''
+		$scope.tempLogicGroupId = $scope.Builder.Config.Logic[index][3]?.group_id || 'default'
+		jQuery('#logic_name_modal').fc_modal('show')
+	}
+
+	// Save logic name from modal
+	$scope.saveLogicName = function() {
+		if ($scope.editingLogicIndex !== null) {
+			if (!$scope.Builder.Config.Logic[$scope.editingLogicIndex][3]) {
+				$scope.Builder.Config.Logic[$scope.editingLogicIndex][3] = {}
+			}
+			$scope.Builder.Config.Logic[$scope.editingLogicIndex][3].logic_name = $scope.tempLogicName
+			$scope.Builder.Config.Logic[$scope.editingLogicIndex][3].description = $scope.tempLogicDescription
+			$scope.Builder.Config.Logic[$scope.editingLogicIndex][3].group_id = $scope.tempLogicGroupId
+		}
+		jQuery('#logic_name_modal').fc_modal('hide')
+		$scope.editingLogicIndex = null
+	}
+
+	// Get field label from ID for search/filter
+	$scope.getFieldLabel = function(fieldId) {
+		if (!$scope.Builder.FormElements) return null
+		for (let page in $scope.Builder.FormElements) {
+			for (let element in $scope.Builder.FormElements[page]) {
+				if ($scope.Builder.FormElements[page][element].identifier === fieldId) {
+					return $scope.Builder.FormElements[page][element].elementDefaults.main_label
+				}
+			}
+		}
+		return null
+	}
+
 	$scope.addLogic = function() {
 		if (typeof $scope.Builder.Config.Logic === 'undefined') {
 			$scope.Builder.Config.Logic = []
 		}
+		$scope.ensureLogicStructure()
 		$scope.Builder.Config.Logic.push([])
 		let len = $scope.Builder.Config.Logic.length - 1
 		$scope.Builder.Config.Logic[len][0] = [[]]
 		$scope.Builder.Config.Logic[len][1] = [[]]
 		$scope.Builder.Config.Logic[len][2] = 'and'
+		// Add metadata
+		$scope.Builder.Config.Logic[len][3] = {
+			logic_id: 'logic_' + generateUUID(),
+			logic_name: '',
+			group_id: 'default',
+			description: '',
+			enabled: true
+		}
 	}
 	$scope.removeLogic = function($index) {
 		$scope.Builder.Config.Logic.splice($index, 1)
@@ -2130,6 +2286,63 @@ FormCraftApp.controller('FormController', function($scope, $locale, $http, $time
 	}
 	$scope.removeLogicResult = function($parent, $index) {
 		$scope.Builder.Config.Logic[$parent][1].splice($index, 1)
+	}
+
+	// Filter state
+	$scope.logicSearchQuery = ''
+	$scope.logicFilterActionType = ''
+	$scope.logicFilterGroup = ''
+
+	// Filter function for logic display
+	$scope.shouldShowLogic = function(logic, index) {
+		// Group filter
+		if ($scope.logicFilterGroup && logic[3]?.group_id !== $scope.logicFilterGroup) {
+			return false
+		}
+
+		// Action type filter
+		if ($scope.logicFilterActionType) {
+			const hasAction = logic[1].some(action => action[0] === $scope.logicFilterActionType)
+			if (!hasAction) return false
+		}
+
+		// Search query filter
+		if ($scope.logicSearchQuery) {
+			const query = $scope.logicSearchQuery.toLowerCase()
+			let matches = false
+
+			// Search in condition fields
+			logic[0].forEach(condition => {
+				const fieldId = condition[0]
+				const fieldLabel = $scope.getFieldLabel(fieldId)
+				if (fieldLabel && fieldLabel.toLowerCase().includes(query)) {
+					matches = true
+				}
+			})
+
+			// Search in logic name
+			if (logic[3]?.logic_name?.toLowerCase().includes(query)) {
+				matches = true
+			}
+
+			if (!matches) return false
+		}
+
+		return true
+	}
+
+	// Clear all filters
+	$scope.clearLogicFilters = function() {
+		$scope.logicSearchQuery = ''
+		$scope.logicFilterActionType = ''
+		$scope.logicFilterGroup = ''
+	}
+
+	// Highlight matching text
+	$scope.highlightMatch = function(text, query) {
+		if (!query || !text) return text
+		const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
+		return text.replace(regex, '<mark>$1</mark>')
 	}
 	$scope.removeFormElement = function ($parent, $index) {
 		$scope.Builder.FormElements[$parent].splice($index, 1)

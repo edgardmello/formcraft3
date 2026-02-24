@@ -791,14 +791,14 @@ class FormCraft {
 
 				case 'contains':
 				if (conditionToCheck === '') {
-					if (value !== '') conditionsSatisfied++
+					if (value !== '' && value !== null && value !== undefined) conditionsSatisfied++
 					break
 				}
-				if (value.toString().indexOf(conditionToCheck) !== -1) conditionsSatisfied++
+				if (value != null && value.toString().indexOf(conditionToCheck) !== -1) conditionsSatisfied++
 				break
 
 				case 'contains_not':
-				if (value.toString().indexOf(conditionToCheck) === -1) conditionsSatisfied++
+				if (value == null || value.toString().indexOf(conditionToCheck) === -1) conditionsSatisfied++
 				break
 
 				case 'greater_than':
@@ -817,6 +817,65 @@ class FormCraft {
 					tempVal = conditionToCheck
 				}
 				if (!isNaN(parseFloat(value)) && parseFloat(value) < parseFloat(tempVal)) conditionsSatisfied++
+				break
+
+				// New operators
+				case 'is_empty':
+				if (value.toString() === '' || value === null || value === undefined) conditionsSatisfied++
+				break
+
+				case 'is_not_empty':
+				if (value.toString() !== '' && value !== null && value !== undefined) conditionsSatisfied++
+				break
+
+				case 'starts_with':
+				if (value != null && value.toString().indexOf(conditionToCheck) === 0) conditionsSatisfied++
+				break
+
+				case 'ends_with':
+				if (value != null && value.toString().endsWith(conditionToCheck)) conditionsSatisfied++
+				break
+
+				case 'regex':
+				try {
+					const regex = new RegExp(conditionToCheck)
+					if (value != null && regex.test(value.toString())) conditionsSatisfied++
+				} catch(e) {
+					console.error('Invalid regex pattern:', conditionToCheck)
+				}
+				break
+
+				case 'is_checked':
+				const checkboxEl = jQuery(`.uniq-${parent} [data-field-id="${conditions[x][0]}"]`)
+				if (checkboxEl.length > 0 && checkboxEl.prop('checked')) conditionsSatisfied++
+				break
+
+				case 'is_not_checked':
+				const checkboxEl2 = jQuery(`.uniq-${parent} [data-field-id="${conditions[x][0]}"]`)
+				if (checkboxEl2.length === 0 || !checkboxEl2.prop('checked')) conditionsSatisfied++
+				break
+
+				case 'equals_any':
+				const values = conditionToCheck.split(',').map(v => v.trim())
+				if (value != null && values.indexOf(value.toString()) !== -1) conditionsSatisfied++
+				break
+
+				case 'date_is':
+				const fieldDateIs = this.getFieldValue(jQuery(`.uniq-${parent} [data-field-id="${conditions[x][0]}"]`), 'date')
+				const targetDateIs = this.dateToDifference(conditionToCheck)
+				if (fieldDateIs === targetDateIs) conditionsSatisfied++
+				break
+
+				case 'date_before':
+				const fieldDateBefore = this.getFieldValue(jQuery(`.uniq-${parent} [data-field-id="${conditions[x][0]}"]`), 'date')
+				const beforeDate = this.dateToDifference(conditionToCheck)
+				if (!isNaN(fieldDateBefore) && !isNaN(beforeDate) && fieldDateBefore < beforeDate) conditionsSatisfied++
+				break
+
+				case 'date_after':
+				const fieldDateAfter = this.getFieldValue(jQuery(`.uniq-${parent} [data-field-id="${conditions[x][0]}"]`), 'date')
+				const afterDate = this.dateToDifference(conditionToCheck)
+				if (!isNaN(fieldDateAfter) && !isNaN(afterDate) && fieldDateAfter > afterDate) conditionsSatisfied++
 				break
 			}
 		}
