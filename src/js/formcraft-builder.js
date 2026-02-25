@@ -2298,8 +2298,11 @@ FormCraftApp.controller('FormController', function($scope, $locale, $http, $time
 
 	// Filter function for logic display
 	$scope.shouldShowLogic = function(logic, index) {
+		// Get group_id safely - default to 'default' for old logic structures
+		const logicGroupId = (logic[3] && logic[3].group_id) ? logic[3].group_id : 'default'
+
 		// Group filter
-		if ($scope.logicFilterGroup && logic[3]?.group_id !== $scope.logicFilterGroup) {
+		if ($scope.logicFilterGroup && logicGroupId !== $scope.logicFilterGroup) {
 			return false
 		}
 
@@ -2324,7 +2327,7 @@ FormCraftApp.controller('FormController', function($scope, $locale, $http, $time
 			})
 
 			// Search in logic name
-			if (logic[3]?.logic_name?.toLowerCase().includes(query)) {
+			if (logic[3] && logic[3].logic_name && logic[3].logic_name.toLowerCase().includes(query)) {
 				matches = true
 			}
 
