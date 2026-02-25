@@ -1771,6 +1771,9 @@ FormCraftApp.controller('FormController', function($scope, $locale, $http, $time
 			$scope.Builder.Config.showStyling = $scope.Builder.Config.showStyling || false
 			$scope.Builder.Config.showLogic = $scope.Builder.Config.showLogic || false
 
+			// Initialize and migrate Logic structure
+			$scope.ensureLogicStructure()
+
 			$scope.Builder.Config.showAddField = $scope.Builder.Config.showAddField || false
 
 			$scope.Builder.Config.decimal_separator = $scope.Builder.Config.decimal_separator === undefined ? '.' : $scope.Builder.Config.decimal_separator
